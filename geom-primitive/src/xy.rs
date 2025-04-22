@@ -1,5 +1,6 @@
 use std::ops::{Index, IndexMut};
 
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct XY {
     pub x: f64,
     pub y: f64,
@@ -47,6 +48,70 @@ impl XY {
         true
     }
 
+    pub fn cross(&self, other: &Self) -> f64 {
+        self.x * other.y - self.y * other.x
+    }
+
+    pub fn cross_magnitude(&self, other: &Self) -> f64 {
+        self.cross(other).abs()
+    }
+
+    pub fn cross_magnitude_squared(&self, other: &Self) -> f64 {
+        self.cross(other).powi(2)
+    }
+
+    pub fn dot(&self, other: &Self) -> f64 {
+        self.x * other.x + self.y * other.y
+    }
+
+    pub fn normalize(&mut self) {
+        let modulus = self.modulus();
+        if modulus > 0.0 {
+            self.x /= modulus;
+            self.y /= modulus;
+        }
+    }
+
+    pub fn normalize_new(&self) -> Self {
+        let mut result = *self;
+        result.normalize();
+        result
+    }
+
+    pub fn reverse(&mut self) {
+        self.x = -self.x;
+        self.y = -self.y;
+    }
+
+    pub fn reverse_new(&self) -> Self {
+        let mut result = *self;
+        result.reverse();
+        result
+    }
+
+    // a1 * xy1 + a2 * xy2
+    pub fn set_linear_form_2(&mut self, a1: f64, xy1: XY, a2: f64, xy2: XY) {
+        self.x = a1 * xy1.x + a2 * xy2.x;
+        self.y = a1 * xy1.y + a2 * xy2.y;
+    }
+
+    // a1 * xy1 + xy2
+    pub fn set_linear_form_2a(&mut self, a1: f64, xy1: XY, xy2: XY) {
+        self.x = a1 * xy1.x + xy2.x;
+        self.y = a1 * xy1.y + xy2.y;
+    }
+
+    // xy1 + xy2
+    pub fn set_linear_form_2b(&mut self, xy1: XY, xy2: XY) {
+        self.x = xy1.x + xy2.x;
+        self.y = xy1.y + xy2.y;
+    }
+
+    // a1 * xy1 + a2 * xy2 + xy3
+    pub fn set_linear_form_3(&mut self, a1: f64, xy1: XY, a2: f64, xy2: XY, xy3: XY) {
+        self.x = a1 * xy1.x + a2 * xy2.x + xy3.x;
+        self.y = a1 * xy1.y + a2 * xy2.y + xy3.y;
+    }
 }
 
 impl Index<usize> for XY {
@@ -70,3 +135,170 @@ impl IndexMut<usize> for XY {
         }
     }
 }
+
+use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
+
+impl Neg for XY {
+    type Output = XY;
+
+    fn neg(self) -> Self::Output {
+        self.reverse_new()
+    }
+}
+
+impl AddAssign<&XY> for XY {
+    fn add_assign(&mut self, other: &XY) {
+        self.x += other.x;
+        self.y += other.y;
+    }
+}
+
+impl Add<&XY> for XY {
+    type Output = XY;
+
+    fn add(self, other: &XY) -> Self::Output {
+        XY {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+
+impl AddAssign<f64> for XY {
+    fn add_assign(&mut self, other: f64) {
+        self.x += other;
+        self.y += other;
+    }
+}
+
+impl Add<f64> for XY {
+    type Output = XY;
+
+    fn add(self, other: f64) -> Self::Output {
+        XY {
+            x: self.x + other,
+            y: self.y + other,
+        }
+    }
+}
+
+impl SubAssign<&XY> for XY {
+    fn sub_assign(&mut self, other: &XY) {
+        self.x -= other.x;
+        self.y -= other.y;
+    }
+}
+
+impl Sub<&XY> for XY {
+    type Output = XY;
+
+    fn sub(self, other: &XY) -> Self::Output {
+        XY {
+            x: self.x - other.x,
+            y: self.y - other.y,
+        }
+    }
+}
+
+impl Sub<f64> for XY {
+    type Output = XY;
+
+    fn sub(self, other: f64) -> Self::Output {
+        XY {
+            x: self.x - other,
+            y: self.y - other,
+        }
+    }
+}
+
+impl SubAssign<f64> for XY {
+    fn sub_assign(&mut self, other: f64) {
+        self.x -= other;
+        self.y -= other;
+    }
+}
+
+impl DivAssign<&XY> for XY {
+    fn div_assign(&mut self, other: &XY) {
+        self.x /= other.x;
+        self.y /= other.y;
+    }
+}
+
+impl Div<&XY> for XY {
+    type Output = XY;
+
+    fn div(self, other: &XY) -> Self::Output {
+        XY {
+            x: self.x / other.x,
+            y: self.y / other.y,
+        }
+    }
+}
+
+impl Div<f64> for XY {
+    type Output = XY;
+
+    fn div(self, other: f64) -> Self::Output {
+        XY {
+            x: self.x / other,
+            y: self.y / other,
+        }
+    }
+}
+
+impl DivAssign<f64> for XY {
+    fn div_assign(&mut self, other: f64) {
+        self.x /= other;
+        self.y /= other;
+    }
+}
+
+impl MulAssign<&XY> for XY {
+    fn mul_assign(&mut self, other: &XY) {
+        self.x *= other.x;
+        self.y *= other.y;
+    }
+}
+
+impl Mul<&XY> for XY {
+    type Output = XY;
+
+    fn mul(self, other: &XY) -> Self::Output {
+        XY {
+            x: self.x * other.x,
+            y: self.y * other.y,
+        }
+    }
+}
+
+impl Mul<f64> for XY {
+    type Output = XY;
+
+    fn mul(self, other: f64) -> Self::Output {
+        XY {
+            x: self.x * other,
+            y: self.y * other,
+        }
+    }
+}
+
+impl MulAssign<f64> for XY {
+    fn mul_assign(&mut self, other: f64) {
+        self.x *= other;
+        self.y *= other;
+    }
+}
+
+impl Mul<XY> for f64 {
+    type Output = XY;
+
+    fn mul(self, other: XY) -> Self::Output {
+        XY {
+            x: self * other.x,
+            y: self * other.y,
+        }
+    }
+}
+
+// Todo Mul Matrix2d
