@@ -21,6 +21,32 @@ impl XY {
             _ => panic!("Index out of bounds"),
         }
     }
+
+    pub fn coord(&mut self, x: f64, y: f64) {
+        self.x = x;
+        self.y = y;
+    }
+
+    pub fn modulus(&self) -> f64 {
+        (self.x * self.x + self.y * self.y).sqrt()
+    }
+
+    pub fn square_modulus(&self) -> f64 {
+        self.x * self.x + self.y * self.y
+    }
+
+    pub fn is_equal(&self, other: &Self, tolerance: f64) -> bool {
+        let val: f64 = self.x - other.x;
+        if val.abs() > tolerance {
+            return false;
+        }
+        let val = self.y - other.y;
+        if val.abs() > tolerance {
+            return false;
+        }
+        true
+    }
+
 }
 
 impl Index<usize> for XY {

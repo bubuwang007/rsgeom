@@ -49,4 +49,35 @@ mod tests {
         assert_eq!(p.y, 2.0);
     }
 
+    #[test]
+    fn test_coord() {
+        let mut p = XY::new();
+        p.coord(5.0, 6.0);
+        assert_eq!(p.x, 5.0);
+        assert_eq!(p.y, 6.0);
+    }
+
+    #[test]
+    fn test_modulus() {
+        let p = XY::from_coordinates(3.0, 4.0);
+        assert_eq!(p.modulus(), 5.0);
+    }
+
+    #[test]
+    fn test_square_modulus() {
+        let p = XY::from_coordinates(3.0, 4.0);
+        assert_eq!(p.square_modulus(), 25.0);
+    }
+
+    #[test]
+    fn test_is_equal() {
+        let p1 = XY::from_coordinates(1.0, 2.0);
+        let p2 = XY::from_coordinates(1.0, 2.0);
+        assert!(p1.is_equal(&p2, 0.01));
+
+        // let p3 = XY::from_coordinates(1.0, 2.01);
+        // assert!(!p1.is_equal(&p3, 0.011));
+    }
+
+
 }
