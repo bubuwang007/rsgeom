@@ -1,4 +1,3 @@
-use std::ops::{Index, IndexMut};
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct XY {
@@ -13,6 +12,10 @@ impl XY {
 
     pub fn from_coordinates(x: f64, y: f64) -> Self {
         XY { x, y }
+    }
+
+    pub fn to_string(&self) -> String {
+        format!("XY({}, {})", self.x, self.y)
     }
 
     pub fn change_coord(&mut self, index: usize) -> &mut f64 {
@@ -113,6 +116,8 @@ impl XY {
         self.y = a1 * xy1.y + a2 * xy2.y + xy3.y;
     }
 }
+
+use std::ops::{Index, IndexMut};
 
 impl Index<usize> for XY {
     type Output = f64;
