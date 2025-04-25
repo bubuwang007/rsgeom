@@ -133,7 +133,7 @@ mod tests {
     fn test_cross_magnitude_squared() {
         let p1 = XY::from_coordinates(1.0, 2.0);
         let p2 = XY::from_coordinates(3.0, 4.0);
-        assert_eq!(p1.cross_magnitude_squared(&p2), 4.0);
+        assert_eq!(p1.square_cross_magnitude(&p2), 4.0);
     }
 
     #[test]
@@ -214,7 +214,6 @@ mod tests {
         assert_eq!(p3.x, 3.0);
         assert_eq!(p3.y, 6.0);
     }
-
 
     #[test]
     fn test_mul_f64() {

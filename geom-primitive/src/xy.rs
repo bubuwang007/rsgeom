@@ -59,7 +59,7 @@ impl XY {
         self.cross(other).abs()
     }
 
-    pub fn cross_magnitude_squared(&self, other: &Self) -> f64 {
+    pub fn square_cross_magnitude(&self, other: &Self) -> f64 {
         self.cross(other).powi(2)
     }
 

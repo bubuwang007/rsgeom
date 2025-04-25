@@ -1,6 +1,9 @@
 use geom_primitive::Point2d;
 
 fn main() {
-    let p1 = Point2d::from_coordinates(1.0, 2.0);
-    println!("{}", p1.to_string());
+    let a = "hello".to_string();
+    let mut b = &a;  
+    let c = &a;        
+
+    println!("a: {}, b: {}, c:{}", a, b, c);
 }
