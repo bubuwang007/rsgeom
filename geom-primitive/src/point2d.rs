@@ -2,7 +2,7 @@ use crate::xy::XY;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Point2d {
-    pub xy: XY,
+    xy: XY,
 }
 
 impl Point2d {
@@ -52,20 +52,16 @@ impl Point2d {
         (self.xy.x, self.xy.y)
     }
 
-    pub fn set_coordinates(&mut self, x: f64, y: f64) {
+    pub fn set_coord(&mut self, x: f64, y: f64) {
         self.xy.x = x;
         self.xy.y = y;
-    }
-
-    pub fn change_coord(&mut self) -> &mut XY {
-        &mut self.xy
     }
 
     pub fn distance(&self, other: &Self) -> f64 {
         ((self.xy.x - other.xy.x).powi(2) + (self.xy.y - other.xy.y).powi(2)).sqrt()
     }
 
-    pub fn distance_squared(&self, other: &Self) -> f64 {
+    pub fn square_distance(&self, other: &Self) -> f64 {
         (self.xy.x - other.xy.x).powi(2) + (self.xy.y - other.xy.y).powi(2)
     }
 

@@ -87,13 +87,13 @@ mod tests {
         assert_eq!(m1[1][0], 10.0);
         assert_eq!(m1[1][1], 12.0);
 
-        let m3 = m1 + &m2;
+        let m3 = &m1 + &m2;
         assert_eq!(m3[0][0], 11.0);
         assert_eq!(m3[0][1], 14.0);
         assert_eq!(m3[1][0], 17.0);
         assert_eq!(m3[1][1], 20.0);
 
-        let m4 = m1 + 2.0;
+        let m4 = &m1 + 2.0;
         assert_eq!(m4[0][0], 8.0);
         assert_eq!(m4[0][1], 10.0);
         assert_eq!(m4[1][0], 12.0);
@@ -187,7 +187,7 @@ mod tests {
     fn test_f64_mul() {
         let m = Matrix2d::from_coordinates(1.0, 2.0, 3.0, 4.0);
         let f = 2.0;
-        let result = f * m;
+        let result = f * &m;
         assert_eq!(result[0][0], 2.0);
         assert_eq!(result[0][1], 4.0);
         assert_eq!(result[1][0], 6.0);

@@ -17,15 +17,11 @@ impl XY {
         format!("XY({}, {})", self.x, self.y)
     }
 
-    pub fn change_coord(&mut self, index: usize) -> &mut f64 {
-        match index {
-            0 => &mut self.x,
-            1 => &mut self.y,
-            _ => panic!("Index out of bounds"),
-        }
+    pub fn coord(&self) -> (f64, f64) {
+        (self.x, self.y)
     }
 
-    pub fn coord(&mut self, x: f64, y: f64) {
+    pub fn set_coord(&mut self, x: f64, y: f64) {
         self.x = x;
         self.y = y;
     }
@@ -54,11 +50,11 @@ impl XY {
         self.x * other.y - self.y * other.x
     }
 
-    pub fn cross_magnitude(&self, other: &Self) -> f64 {
+    pub fn cross_abs(&self, other: &Self) -> f64 {
         self.cross(other).abs()
     }
 
-    pub fn square_cross_magnitude(&self, other: &Self) -> f64 {
+    pub fn square_cross_abs(&self, other: &Self) -> f64 {
         self.cross(other).powi(2)
     }
 
@@ -92,25 +88,25 @@ impl XY {
     }
 
     // a1 * xy1 + a2 * xy2
-    pub fn set_linear_form_2(&mut self, a1: f64, xy1: XY, a2: f64, xy2: XY) {
+    pub fn set_linear_form_2(&mut self, a1: f64, xy1: &XY, a2: f64, xy2: &XY) {
         self.x = a1 * xy1.x + a2 * xy2.x;
         self.y = a1 * xy1.y + a2 * xy2.y;
     }
 
     // a1 * xy1 + xy2
-    pub fn set_linear_form_2a(&mut self, a1: f64, xy1: XY, xy2: XY) {
+    pub fn set_linear_form_2a(&mut self, a1: f64, xy1: &XY, xy2: &XY) {
         self.x = a1 * xy1.x + xy2.x;
         self.y = a1 * xy1.y + xy2.y;
     }
 
     // xy1 + xy2
-    pub fn set_linear_form_2b(&mut self, xy1: XY, xy2: XY) {
+    pub fn set_linear_form_2b(&mut self, xy1: &XY, xy2: &XY) {
         self.x = xy1.x + xy2.x;
         self.y = xy1.y + xy2.y;
     }
 
     // a1 * xy1 + a2 * xy2 + xy3
-    pub fn set_linear_form_3(&mut self, a1: f64, xy1: XY, a2: f64, xy2: XY, xy3: XY) {
+    pub fn set_linear_form_3(&mut self, a1: f64, xy1: &XY, a2: f64, xy2: &XY, xy3: &XY) {
         self.x = a1 * xy1.x + a2 * xy2.x + xy3.x;
         self.y = a1 * xy1.y + a2 * xy2.y + xy3.y;
     }
@@ -157,7 +153,7 @@ impl AddAssign<&XY> for XY {
     }
 }
 
-impl Add<&XY> for XY {
+impl Add<&XY> for &XY {
     type Output = XY;
 
     fn add(self, other: &XY) -> Self::Output {
@@ -193,7 +189,7 @@ impl SubAssign<&XY> for XY {
     }
 }
 
-impl Sub<&XY> for XY {
+impl Sub<&XY> for &XY {
     type Output = XY;
 
     fn sub(self, other: &XY) -> Self::Output {
@@ -204,7 +200,7 @@ impl Sub<&XY> for XY {
     }
 }
 
-impl Sub<f64> for XY {
+impl Sub<f64> for &XY {
     type Output = XY;
 
     fn sub(self, other: f64) -> Self::Output {
@@ -229,7 +225,7 @@ impl DivAssign<&XY> for XY {
     }
 }
 
-impl Div<&XY> for XY {
+impl Div<&XY> for &XY {
     type Output = XY;
 
     fn div(self, other: &XY) -> Self::Output {
@@ -240,7 +236,7 @@ impl Div<&XY> for XY {
     }
 }
 
-impl Div<f64> for XY {
+impl Div<f64> for &XY {
     type Output = XY;
 
     fn div(self, other: f64) -> Self::Output {
@@ -265,7 +261,7 @@ impl MulAssign<&XY> for XY {
     }
 }
 
-impl Mul<&XY> for XY {
+impl Mul<&XY> for &XY {
     type Output = XY;
 
     fn mul(self, other: &XY) -> Self::Output {
@@ -276,7 +272,7 @@ impl Mul<&XY> for XY {
     }
 }
 
-impl Mul<f64> for XY {
+impl Mul<f64> for &XY {
     type Output = XY;
 
     fn mul(self, other: f64) -> Self::Output {
@@ -294,10 +290,10 @@ impl MulAssign<f64> for XY {
     }
 }
 
-impl Mul<XY> for f64 {
+impl Mul<&XY> for f64 {
     type Output = XY;
 
-    fn mul(self, other: XY) -> Self::Output {
+    fn mul(self, other: &XY) -> Self::Output {
         XY {
             x: self * other.x,
             y: self * other.y,

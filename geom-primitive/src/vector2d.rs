@@ -3,7 +3,7 @@ use crate::xy::XY;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Vector2d {
-    pub xy: XY,
+    xy: XY,
 }
 
 impl Vector2d {
@@ -25,7 +25,7 @@ impl Vector2d {
 
     pub fn from_points(p1: &Point2d, p2: &Point2d) -> Self {
         Vector2d {
-            xy: XY::from_coordinates(p2.xy.x - p1.xy.x, p2.xy.y - p1.xy.y),
+            xy: XY::from_coordinates(p2.x() - p1.x(), p2.y() - p1.y()),
         }
     }
 
@@ -41,8 +41,8 @@ impl Vector2d {
         self.xy.y
     }
 
-    pub fn xy(&self) -> XY {
-        self.xy
+    pub fn xy(&self) -> &XY {
+        &self.xy
     }
 
     pub fn coord(&self) -> (f64, f64) {
@@ -61,7 +61,7 @@ impl Vector2d {
         self.xy = xy;
     }
 
-    pub fn set_coordinates(&mut self, x: f64, y: f64) {
+    pub fn set_coord(&mut self, x: f64, y: f64) {
         self.xy.x = x;
         self.xy.y = y;
     }
@@ -152,12 +152,12 @@ impl Vector2d {
         self.xy.cross(&other.xy())
     }
 
-    pub fn cross_magnitude(&self, other: &Self) -> f64 {
-        self.xy.cross_magnitude(&other.xy())
+    pub fn cross_abs(&self, other: &Self) -> f64 {
+        self.xy.cross_abs(&other.xy())
     }
 
-    pub fn square_cross_magnitude(&self, other: &Self) -> f64 {
-        self.xy.square_cross_magnitude(&other.xy())
+    pub fn square_cross_abs(&self, other: &Self) -> f64 {
+        self.xy.square_cross_abs(&other.xy())
     }
 
     pub fn dot(&self, other: &Self) -> f64 {
@@ -185,22 +185,22 @@ impl Vector2d {
     }
 
     // a1 * v1 + a2 * v2
-    pub fn set_linear_form_2(&mut self, a1: f64, v1: Self, a2: f64, v2: Self) {
+    pub fn set_linear_form_2(&mut self, a1: f64, v1: &Vector2d, a2: f64, v2: &Vector2d) {
         self.xy.set_linear_form_2(a1, v1.xy(), a2, v2.xy());
     }
 
     // a1 * v1 + v2
-    pub fn set_linear_form_2a(&mut self, a1: f64, v1: Self, v2: Self) {
+    pub fn set_linear_form_2a(&mut self, a1: f64, v1: &Vector2d, v2: &Vector2d) {
         self.xy.set_linear_form_2a(a1, v1.xy(), v2.xy());
     }
 
     // v1 + v2
-    pub fn set_linear_form_2b(&mut self, v1: Self, v2: Self) {
+    pub fn set_linear_form_2b(&mut self, v1: &Vector2d, v2: &Vector2d) {
         self.xy.set_linear_form_2b(v1.xy(), v2.xy());
     }
 
     // a1 * v1 + a2 * v2 + v3
-    pub fn set_linear_form_3(&mut self, a1: f64, v1: Self, a2: f64, v2: Self, v3: Self) {
+    pub fn set_linear_form_3(&mut self, a1: f64, v1: &Vector2d, a2: f64, v2: &Vector2d, v3: &Vector2d) {
         self.xy.set_linear_form_3(a1, v1.xy(), a2, v2.xy(), v3.xy());
     }
 
@@ -230,6 +230,19 @@ impl Vector2d {
     // pub fn rotate(&mut self, angle: f64) {
 
     // }
+
+    pub fn scale(&mut self, scale: f64) {
+        *self *= scale;
+    }
+
+    pub fn scale_new(&self, scale: f64) -> Self {
+        let mut result = *self;
+        result.scale(scale);
+        result
+    }
+
+    // transform
+
 }
 
 use std::ops::{Index, IndexMut};
@@ -258,7 +271,7 @@ impl IndexMut<usize> for Vector2d {
 
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
-impl Neg for Vector2d {
+impl Neg for &Vector2d {
     type Output = Vector2d;
 
     fn neg(self) -> Self::Output {
@@ -278,17 +291,17 @@ impl AddAssign<f64> for Vector2d {
     }
 }
 
-impl Add<&Vector2d> for Vector2d {
+impl Add<&Vector2d> for &Vector2d {
     type Output = Vector2d;
 
     fn add(self, other: &Vector2d) -> Self::Output {
         Vector2d {
-            xy: self.xy + &other.xy,
+            xy: &self.xy + &other.xy,
         }
     }
 }
 
-impl Add<f64> for Vector2d {
+impl Add<f64> for &Vector2d {
     type Output = Vector2d;
 
     fn add(self, other: f64) -> Self::Output {
@@ -304,12 +317,12 @@ impl DivAssign<f64> for Vector2d {
     }
 }
 
-impl Div<f64> for Vector2d {
+impl Div<f64> for &Vector2d {
     type Output = Vector2d;
 
     fn div(self, other: f64) -> Self::Output {
         Vector2d {
-            xy: self.xy / other,
+            xy: &self.xy / other,
         }
     }
 }
@@ -326,7 +339,7 @@ impl MulAssign<f64> for Vector2d {
     }
 }
 
-impl Mul<&Vector2d> for Vector2d {
+impl Mul<&Vector2d> for &Vector2d {
     type Output = f64;
 
     fn mul(self, other: &Vector2d) -> Self::Output {
@@ -334,22 +347,22 @@ impl Mul<&Vector2d> for Vector2d {
     }
 }
 
-impl Mul<f64> for Vector2d {
+impl Mul<f64> for &Vector2d {
     type Output = Vector2d;
 
     fn mul(self, other: f64) -> Self::Output {
         Vector2d {
-            xy: self.xy * other,
+            xy: &self.xy * other,
         }
     }
 }
 
-impl Mul<Vector2d> for f64 {
+impl Mul<&Vector2d> for f64 {
     type Output = Vector2d;
 
-    fn mul(self, other: Vector2d) -> Self::Output {
+    fn mul(self, other: &Vector2d) -> Self::Output {
         Vector2d {
-            xy: other.xy * self,
+            xy: &other.xy * self,
         }
     }
 }
@@ -366,22 +379,22 @@ impl SubAssign<f64> for Vector2d {
     }
 }
 
-impl Sub<&Vector2d> for Vector2d {
+impl Sub<&Vector2d> for &Vector2d {
     type Output = Vector2d;
 
     fn sub(self, other: &Vector2d) -> Self::Output {
         Vector2d {
-            xy: self.xy - &other.xy,
+            xy: &self.xy - &other.xy,
         }
     }
 }
 
-impl Sub<f64> for Vector2d {
+impl Sub<f64> for &Vector2d {
     type Output = Vector2d;
 
     fn sub(self, other: f64) -> Self::Output {
         Vector2d {
-            xy: self.xy - other,
+            xy: &self.xy - other,
         }
     }
 }

@@ -55,6 +55,10 @@ impl Matrix2d {
         self.m[index][1] = xy.y;
     }
 
+    pub fn matrix(&self) -> [[f64; 2]; 2] {
+        self.m
+    }
+
     pub fn set_matrix(&mut self, m: [[f64; 2]; 2]) {
         self.m = m;
     }
@@ -270,7 +274,7 @@ impl IndexMut<usize> for Matrix2d {
 
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
-impl Neg for Matrix2d {
+impl Neg for &Matrix2d {
     type Output = Matrix2d;
 
     fn neg(self) -> Self::Output {
@@ -301,7 +305,7 @@ impl AddAssign<&Matrix2d> for Matrix2d {
     }
 }
 
-impl Add<f64> for Matrix2d {
+impl Add<f64> for &Matrix2d {
     type Output = Matrix2d;
 
     fn add(self, other: f64) -> Self::Output {
@@ -314,7 +318,7 @@ impl Add<f64> for Matrix2d {
     }
 }
 
-impl Add<&Matrix2d> for Matrix2d {
+impl Add<&Matrix2d> for &Matrix2d {
     type Output = Matrix2d;
 
     fn add(self, other: &Matrix2d) -> Self::Output {
@@ -345,7 +349,7 @@ impl DivAssign<&Matrix2d> for Matrix2d {
     }
 }
 
-impl Div<f64> for Matrix2d {
+impl Div<f64> for &Matrix2d {
     type Output = Matrix2d;
 
     fn div(self, other: f64) -> Self::Output {
@@ -358,7 +362,7 @@ impl Div<f64> for Matrix2d {
     }
 }
 
-impl Div<&Matrix2d> for Matrix2d {
+impl Div<&Matrix2d> for &Matrix2d {
     type Output = Matrix2d;
 
     fn div(self, other: &Matrix2d) -> Self::Output {
@@ -389,7 +393,7 @@ impl MulAssign<&Matrix2d> for Matrix2d {
     }
 }
 
-impl Mul<f64> for Matrix2d {
+impl Mul<f64> for &Matrix2d {
     type Output = Matrix2d;
 
     fn mul(self, other: f64) -> Self::Output {
@@ -402,10 +406,10 @@ impl Mul<f64> for Matrix2d {
     }
 }
 
-impl Mul<Matrix2d> for f64 {
+impl Mul<&Matrix2d> for f64 {
     type Output = Matrix2d;
 
-    fn mul(self, other: Matrix2d) -> Self::Output {
+    fn mul(self, other: &Matrix2d) -> Self::Output {
         return other * self;
     }
 }
@@ -441,7 +445,7 @@ impl SubAssign<&Matrix2d> for Matrix2d {
     }
 }
 
-impl Sub<f64> for Matrix2d {
+impl Sub<f64> for &Matrix2d {
     type Output = Matrix2d;
 
     fn sub(self, other: f64) -> Self::Output {
@@ -454,7 +458,7 @@ impl Sub<f64> for Matrix2d {
     }
 }
 
-impl Sub<&Matrix2d> for Matrix2d {
+impl Sub<&Matrix2d> for &Matrix2d {
     type Output = Matrix2d;
 
     fn sub(self, other: &Matrix2d) -> Self::Output {

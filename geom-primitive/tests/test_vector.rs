@@ -7,23 +7,23 @@ mod tests {
     #[test]
     fn test_init() {
         let v1 = Vector2d::new();
-        assert_eq!(v1.xy.x, 0.0);
-        assert_eq!(v1.xy.y, 0.0);
+        assert_eq!(v1.x(), 0.0);
+        assert_eq!(v1.y(), 0.0);
 
         let v2 = Vector2d::from_coordinates(1.0, 2.0);
-        assert_eq!(v2.xy.x, 1.0);
-        assert_eq!(v2.xy.y, 2.0);
+        assert_eq!(v2.x(), 1.0);
+        assert_eq!(v2.y(), 2.0);
 
         let mut v3 = Vector2d::from_xy(XY::new());
-        v3.xy.x = 3.0;
-        v3.xy.y = 4.0;
-        assert_eq!(v3.xy.x, 3.0);
+        v3[0] = 3.0;
+        v3[1] = 4.0;
+        assert_eq!(v3.x(), 3.0);
 
         let p1 = Point2d::from_coordinates(10.0, 15.0);
         let p2 = Point2d::from_coordinates(20.0, 25.0);
         let v4 = Vector2d::from_points(&p1, &p2);
-        assert_eq!(v4.xy.x, 10.0);
-        assert_eq!(v4.xy.y, 10.0);
+        assert_eq!(v4.x(), 10.0);
+        assert_eq!(v4.y(), 10.0);
     }
 
     #[test]
@@ -95,21 +95,21 @@ mod tests {
     #[test]
     fn test_neg() {
         let v1 = Vector2d::from_coordinates(1.0, 2.0);
-        let v2 = -v1;
-        assert_eq!(v2.xy.x, -1.0);
-        assert_eq!(v2.xy.y, -2.0);
+        let v2 = -&v1;
+        assert_eq!(v2.x(), -1.0);
+        assert_eq!(v2.y(), -2.0);
     }
 
     #[test]
     fn test_add() {
         let v1 = Vector2d::from_coordinates(1.0, 2.0);
         let v2 = Vector2d::from_coordinates(3.0, 4.0);
-        let v3 = v1 + &v2;
-        assert_eq!(v3.xy.x, 4.0);
-        assert_eq!(v3.xy.y, 6.0);
-        let v4 = v1 + 2.0;
-        assert_eq!(v4.xy.x, 3.0);
-        assert_eq!(v4.xy.y, 4.0);
+        let v3 = &v1 + &v2;
+        assert_eq!(v3.x(), 4.0);
+        assert_eq!(v3.y(), 6.0);
+        let v4 = &v1 + 2.0;
+        assert_eq!(v4.x(), 3.0);
+        assert_eq!(v4.y(), 4.0);
     }
 
     #[test]
@@ -117,8 +117,8 @@ mod tests {
         let v1 = Vector2d::from_coordinates(1.0, 2.0);
         let v2 = Vector2d::from_coordinates(3.0, 4.0);
         assert_eq!(v1.cross(&v2), -2.0);
-        assert_eq!(v1.cross_magnitude(&v2), 2.0);
-        assert_eq!(v1.square_cross_magnitude(&v2), 4.0);
+        assert_eq!(v1.cross_abs(&v2), 2.0);
+        assert_eq!(v1.square_cross_abs(&v2), 4.0);
     }
 
     #[test]
@@ -126,33 +126,33 @@ mod tests {
         let v1 = Vector2d::from_coordinates(1.0, 2.0);
         let v2 = Vector2d::from_coordinates(3.0, 4.0);
         assert_eq!(v1.dot(&v2), 11.0);
-        assert_eq!(v1 * &v2, 11.0);
+        assert_eq!(&v1 * &v2, 11.0);
     }
 
     #[test]
     fn test_normalize() {
         let mut v1 = Vector2d::from_coordinates(3.0, 4.0);
         v1.normalize();
-        assert_eq!(v1.xy.x, 0.6);
-        assert_eq!(v1.xy.y, 0.8);
+        assert_eq!(v1.x(), 0.6);
+        assert_eq!(v1.y(), 0.8);
 
         let v2 = Vector2d::from_coordinates(3.0, 4.0);
         let v3 = v2.normalize_new();
-        assert_eq!(v3.xy.x, 0.6);
-        assert_eq!(v3.xy.y, 0.8);
+        assert_eq!(v3.x(), 0.6);
+        assert_eq!(v3.y(), 0.8);
     }
 
     #[test]
     fn test_reverse() {
         let mut v1 = Vector2d::from_coordinates(3.0, 4.0);
         v1.reverse();
-        assert_eq!(v1.xy.x, -3.0);
-        assert_eq!(v1.xy.y, -4.0);
+        assert_eq!(v1.x(), -3.0);
+        assert_eq!(v1.y(), -4.0);
 
         let v2 = Vector2d::from_coordinates(3.0, 4.0);
         let v3 = v2.reverse_new();
-        assert_eq!(v3.xy.x, -3.0);
-        assert_eq!(v3.xy.y, -4.0);
+        assert_eq!(v3.x(), -3.0);
+        assert_eq!(v3.y(), -4.0);
     }
 
     #[test]
@@ -169,5 +169,17 @@ mod tests {
         println!("v1: {:?}", v1);
         assert_eq!((v1.x()-1.0).abs() < 1e-10, true);
         assert_eq!((v1.y()-1.0).abs() < 1e-10, true);
+    }
+
+    #[test]
+    fn test_scale() {
+        let mut v1 = Vector2d::from_coordinates(1.0, 2.0);
+        v1.scale(2.0);
+        assert_eq!(v1.x(), 2.0);
+        assert_eq!(v1.y(), 4.0);
+
+        let v3 = v1.scale_new(2.0);
+        assert_eq!(v3.x(), 4.0);
+        assert_eq!(v3.y(), 8.0);
     }
 }

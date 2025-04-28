@@ -41,18 +41,9 @@ mod tests {
     }
 
     #[test]
-    fn test_change_coord() {
-        let mut p = XY::from_coordinates(1.0, 2.0);
-        let x_coord = p.change_coord(0);
-        *x_coord = 3.0;
-        assert_eq!(p.x, 3.0);
-        assert_eq!(p.y, 2.0);
-    }
-
-    #[test]
     fn test_coord() {
         let mut p = XY::new();
-        p.coord(5.0, 6.0);
+        p.set_coord(5.0, 6.0);
         assert_eq!(p.x, 5.0);
         assert_eq!(p.y, 6.0);
     }
@@ -92,7 +83,7 @@ mod tests {
     fn test_add() {
         let p1 = XY::from_coordinates(1.0, 2.0);
         let p2 = XY::from_coordinates(3.0, 4.0);
-        let p3 = p1 + &p2;
+        let p3 = &p1 + &p2;
         assert_eq!(p3.x, 4.0);
         assert_eq!(p3.y, 6.0);
     }
@@ -126,14 +117,14 @@ mod tests {
     fn test_cross_magnitude() {
         let p1 = XY::from_coordinates(1.0, 2.0);
         let p2 = XY::from_coordinates(3.0, 4.0);
-        assert_eq!(p1.cross_magnitude(&p2), 2.0);
+        assert_eq!(p1.cross_abs(&p2), 2.0);
     }
 
     #[test]
     fn test_cross_magnitude_squared() {
         let p1 = XY::from_coordinates(1.0, 2.0);
         let p2 = XY::from_coordinates(3.0, 4.0);
-        assert_eq!(p1.square_cross_magnitude(&p2), 4.0);
+        assert_eq!(p1.square_cross_abs(&p2), 4.0);
     }
 
     #[test]
@@ -149,7 +140,7 @@ mod tests {
     fn test_div() {
         let p1 = XY::from_coordinates(4.0, 8.0);
         let p2 = XY::from_coordinates(2.0, 4.0);
-        let p3 = p1 / &p2;
+        let p3 = &p1 / &p2;
         assert_eq!(p3.x, 2.0);
         assert_eq!(p3.y, 2.0);
     }
@@ -167,7 +158,7 @@ mod tests {
     fn test_div_f64() {
         let p1 = XY::from_coordinates(4.0, 8.0);
         let p2 = 2.0;
-        let p3 = p1 / p2;
+        let p3 = &p1 / p2;
         assert_eq!(p3.x, 2.0);
         assert_eq!(p3.y, 4.0);
     }
@@ -192,7 +183,7 @@ mod tests {
     fn test_mul() {
         let p1 = XY::from_coordinates(1.0, 2.0);
         let p2 = XY::from_coordinates(3.0, 4.0);
-        let p3 = p1 * &p2;
+        let p3 = &p1 * &p2;
         assert_eq!(p3.x, 3.0);
         assert_eq!(p3.y, 8.0);
     }
@@ -210,7 +201,7 @@ mod tests {
     fn test_f64_mul_xy() {
         let p1 = XY::from_coordinates(1.0, 2.0);
         let p2 = 3.0;
-        let p3 = p2 * p1;
+        let p3 = p2 * &p1;
         assert_eq!(p3.x, 3.0);
         assert_eq!(p3.y, 6.0);
     }
@@ -219,7 +210,7 @@ mod tests {
     fn test_mul_f64() {
         let p1 = XY::from_coordinates(1.0, 2.0);
         let p2 = 3.0;
-        let p3 = p1 * p2;
+        let p3 = &p1 * p2;
         assert_eq!(p3.x, 3.0);
         assert_eq!(p3.y, 6.0);
     }
@@ -237,7 +228,7 @@ mod tests {
     fn test_sub() {
         let p1 = XY::from_coordinates(4.0, 8.0);
         let p2 = XY::from_coordinates(2.0, 4.0);
-        let p3 = p1 - &p2;
+        let p3 = &p1 - &p2;
         assert_eq!(p3.x, 2.0);
         assert_eq!(p3.y, 4.0);
     }
@@ -255,7 +246,7 @@ mod tests {
     fn test_sub_f64() {
         let p1 = XY::from_coordinates(4.0, 8.0);
         let p2 = 2.0;
-        let p3 = p1 - p2;
+        let p3 = &p1 - p2;
         assert_eq!(p3.x, 2.0);
         assert_eq!(p3.y, 6.0);
     }
@@ -264,7 +255,7 @@ mod tests {
     fn test_sub_xy() {
         let p1 = XY::from_coordinates(4.0, 8.0);
         let p2 = XY::from_coordinates(2.0, 4.0);
-        let p3 = p1 - &p2;
+        let p3 = &p1 - &p2;
         assert_eq!(p3.x, 2.0);
         assert_eq!(p3.y, 4.0);
     }
@@ -311,7 +302,7 @@ mod tests {
         let mut p = XY::new();
         let xy1 = XY::from_coordinates(1.0, 2.0);
         let xy2 = XY::from_coordinates(3.0, 4.0);
-        p.set_linear_form_2(2.0, xy1, 3.0, xy2);
+        p.set_linear_form_2(2.0, &xy1, 3.0, &xy2);
         assert_eq!(p.x, 11.0);
         assert_eq!(p.y, 16.0);
     }
@@ -322,7 +313,7 @@ mod tests {
         let xy1 = XY::from_coordinates(1.0, 2.0);
         let xy2 = XY::from_coordinates(3.0, 4.0);
         let xy3 = XY::from_coordinates(5.0, 6.0);
-        p.set_linear_form_3(2.0, xy1, 3.0, xy2, xy3);
+        p.set_linear_form_3(2.0, &xy1, 3.0, &xy2, &xy3);
         assert_eq!(p.x, 16.0);
         assert_eq!(p.y, 22.0);
     }
@@ -332,7 +323,7 @@ mod tests {
         let mut p = XY::new();
         let xy1 = XY::from_coordinates(1.0, 2.0);
         let xy2 = XY::from_coordinates(3.0, 4.0);
-        p.set_linear_form_2a(2.0, xy1, xy2);
+        p.set_linear_form_2a(2.0, &xy1, &xy2);
         assert_eq!(p.x, 5.0);
         assert_eq!(p.y, 8.0);
     }
@@ -342,7 +333,7 @@ mod tests {
         let mut p = XY::new();
         let xy1 = XY::from_coordinates(1.0, 2.0);
         let xy2 = XY::from_coordinates(3.0, 4.0);
-        p.set_linear_form_2b(xy1, xy2);
+        p.set_linear_form_2b(&xy1, &xy2);
         assert_eq!(p.x, 4.0);
         assert_eq!(p.y, 6.0);
     }
