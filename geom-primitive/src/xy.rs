@@ -1,4 +1,3 @@
-
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct XY {
     pub x: f64,
@@ -143,7 +142,7 @@ impl IndexMut<usize> for XY {
 
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
-impl Neg for XY {
+impl Neg for &XY {
     type Output = XY;
 
     fn neg(self) -> Self::Output {

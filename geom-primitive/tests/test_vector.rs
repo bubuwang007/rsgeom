@@ -157,7 +157,7 @@ mod tests {
 
     #[test]
     fn test_mirror() {
-        let mut v1 = Vector2d::from_coordinates(1.0, 0.0);
+        let mut v1 = Vector2d::from_coordinates(1.0, -1.0);
         let v2 = Vector2d::from_coordinates(0.0, 1.0);
         v1.mirror_by_vector2d(&v2);
         assert_eq!(v1.x(), 0.0);

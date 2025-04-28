@@ -301,7 +301,7 @@ mod tests {
 
     #[test]
     fn test_neg() {
-        let p = -XY::from_coordinates(3.0, 4.0);
+        let p = -&XY::from_coordinates(3.0, 4.0);
         assert_eq!(p.x, -3.0);
         assert_eq!(p.y, -4.0);
     }

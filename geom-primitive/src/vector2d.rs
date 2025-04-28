@@ -206,6 +206,7 @@ impl Vector2d {
 
     // pub fn mirror_by_ax2d()
 
+    // 存在疑问，结果永远是other
     pub fn mirror_by_vector2d(&mut self, other: &Self) {
         let d = other.xy().modulus();
         if d > std::f64::MIN_POSITIVE {
@@ -224,6 +225,11 @@ impl Vector2d {
         result.mirror_by_vector2d(other);
         result
     }
+
+    // // 需要trsf
+    // pub fn rotate(&mut self, angle: f64) {
+
+    // }
 }
 
 use std::ops::{Index, IndexMut};
@@ -256,7 +262,7 @@ impl Neg for Vector2d {
     type Output = Vector2d;
 
     fn neg(self) -> Self::Output {
-        Vector2d { xy: -self.xy }
+        Vector2d { xy: -&self.xy }
     }
 }
 
@@ -334,6 +340,16 @@ impl Mul<f64> for Vector2d {
     fn mul(self, other: f64) -> Self::Output {
         Vector2d {
             xy: self.xy * other,
+        }
+    }
+}
+
+impl Mul<Vector2d> for f64 {
+    type Output = Vector2d;
+
+    fn mul(self, other: Vector2d) -> Self::Output {
+        Vector2d {
+            xy: other.xy * self,
         }
     }
 }
