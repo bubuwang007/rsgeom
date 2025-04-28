@@ -7,6 +7,15 @@ pub struct Vector2d {
 }
 
 impl Vector2d {
+
+    pub const VX: Vector2d = Vector2d {
+        xy: XY { x: 1.0, y: 0.0 },
+    };
+
+    pub const VY: Vector2d = Vector2d {
+        xy: XY { x: 0.0, y: 1.0 },
+    };
+
     pub fn new() -> Self {
         Vector2d { xy: XY::new() }
     }
