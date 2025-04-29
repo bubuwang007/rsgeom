@@ -301,4 +301,27 @@ impl Mul<&XY> for f64 {
     }
 }
 
-// Todo Mul Matrix2d
+use crate::Matrix2d;
+
+impl MulAssign<&Matrix2d> for XY {
+    
+    fn mul_assign(&mut self, other: &Matrix2d) {
+        let x = self.x;
+        let y = self.y;
+        self.x = other[0][0] * x + other[0][1] * y;
+        self.y = other[1][0] * x + other[1][1] * y;
+    }
+}
+
+impl Mul<&Matrix2d> for &XY {
+    type Output = XY;
+    
+    fn mul(self, other: &Matrix2d) -> Self::Output {
+        let x = self.x;
+        let y = self.y;
+        XY {
+            x: other[0][0] * x + other[0][1] * y,
+            y: other[1][0] * x + other[1][1] * y,
+        }
+    }
+}

@@ -1,4 +1,4 @@
-use crate::{Matrix2d, Point2d, TrsfForm, XY, Vector2d};
+use crate::{Matrix2d, Point2d, TrsfForm, Vector2d, XY};
 
 pub struct Trsf2d {
     scalefac: f64,
@@ -77,6 +77,16 @@ impl Trsf2d {
         self.trans *= 2.0;
     }
 
+    pub fn set_rotation(&mut self, p: &Point2d, angle: f64) {
+        self.form = TrsfForm::Rotation;
+        self.scalefac = 1.0;
+        self.trans = *p.xy();
+        self.trans.reverse();
+        self.matrix.set_rotation(angle);
+        self.trans *= &self.matrix;
+        self.trans += p.xy();
+    }
+
     pub fn set_scale(&mut self, p: &Point2d, scale: f64) {
         self.form = TrsfForm::Scale;
         self.scalefac = scale;
@@ -92,7 +102,20 @@ impl Trsf2d {
         self.trans = *vec.xy();
     }
 
-    
+    pub fn set_translation_by_2points(&mut self, p1: &Point2d, p2: &Point2d) {
+        self.form = TrsfForm::Translation;
+        self.scalefac = 1.0;
+        self.matrix.set_identity();
+        self.trans = p2.xy() - p1.xy();
+    }
+
+    pub fn is_negative(&self) -> bool {
+        self.matrix.determinant() < 0.0
+    }
+
+    pub fn rotation_part(&self) -> f64 {
+        self.matrix[1][0].atan2(self.matrix[0][0])
+    }
 
 
 }
