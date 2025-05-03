@@ -138,6 +138,7 @@ impl IndexMut<usize> for XY {
 
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
+// XY = -&XY
 impl Neg for &XY {
     type Output = XY;
 
@@ -146,6 +147,7 @@ impl Neg for &XY {
     }
 }
 
+// XY += &XY
 impl AddAssign<&XY> for XY {
     fn add_assign(&mut self, other: &XY) {
         self.x += other.x;
@@ -153,6 +155,7 @@ impl AddAssign<&XY> for XY {
     }
 }
 
+// XY = &XY + &XY
 impl Add<&XY> for &XY {
     type Output = XY;
 
@@ -164,6 +167,7 @@ impl Add<&XY> for &XY {
     }
 }
 
+// XY += f64
 impl AddAssign<f64> for XY {
     fn add_assign(&mut self, other: f64) {
         self.x += other;
@@ -171,6 +175,7 @@ impl AddAssign<f64> for XY {
     }
 }
 
+// XY = &XY + f64
 impl Add<f64> for XY {
     type Output = XY;
 

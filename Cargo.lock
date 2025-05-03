@@ -3,6 +3,10 @@
 version = 4
 
 [[package]]
+name = "fem"
+version = "0.1.0"
+
+[[package]]
 name = "geom"
 version = "0.1.0"
 dependencies = [
@@ -11,4 +15,8 @@ dependencies = [
 
 [[package]]
 name = "geom-primitive"
+version = "0.1.0"
+
+[[package]]
+name = "renderer"
 version = "0.1.0"

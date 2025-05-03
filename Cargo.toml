@@ -1,4 +1,4 @@
 
 [workspace]
-members = [ "geom","geom-primitive"]
+members = [ "fem", "geom","geom-primitive", "renderer"]
 
