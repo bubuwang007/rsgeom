@@ -1,4 +1,4 @@
-use geom_primitive::XYZ;
+use geom_primitive::xyz::XYZ;
 
 #[cfg(test)]
 mod tests {
@@ -69,4 +69,7 @@ mod tests {
         assert_eq!(p_mut[1], 5.0);
         assert_eq!(p_mut[2], 6.0);
     }
+
+    
+    
 }

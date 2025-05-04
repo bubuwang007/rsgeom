@@ -1,32 +1,24 @@
-use crate::data_types::float2::Float2;
-
-pub struct Float3 {
+pub struct Float2 {
     pub x: f32,
     pub y: f32,
-    pub z: f32,
 }
 
-impl Float3 {
+impl Float2 {
     #[inline(always)]
-    pub fn new(x: f32, y: f32, z: f32) -> Self {
-        Float3 { x, y, z }
+    pub fn new(x: f32, y: f32) -> Self {
+        Float2 { x, y }
     }
 
     #[inline(always)]
-    pub fn from_value(value: f32) -> Self {
-        Float3 { x: value, y: value, z: value }
-    }
-
-    #[inline(always)]
-    pub fn from_float2(float2: &Float2, z: f32) -> Self {
-        Float3 { x: float2.x, y: float2.y, z }
+    pub fn to_string(&self) -> String {
+        format!("Float2({}, {})", self.x, self.y)
     }
 
 }
 
 use std::ops::{Index, IndexMut};
 
-impl Index<usize> for Float3 {
+impl Index<usize> for Float2 {
     type Output = f32;
 
     #[inline(always)]
@@ -34,19 +26,17 @@ impl Index<usize> for Float3 {
         match index {
             0 => &self.x,
             1 => &self.y,
-            2 => &self.z,
             _ => panic!("Index out of bounds"),
         }
     }
 }
 
-impl IndexMut<usize> for Float3 {
+impl IndexMut<usize> for Float2 {
     #[inline(always)]
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
         match index {
             0 => &mut self.x,
             1 => &mut self.y,
-            2 => &mut self.z,
             _ => panic!("Index out of bounds"),
         }
     }
