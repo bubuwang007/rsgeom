@@ -4,6 +4,12 @@ pub struct XY {
     pub y: f64,
 }
 
+impl std::fmt::Display for XY {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "XY({}, {})", self.x, self.y)
+    }
+}
+
 impl XY {
     pub fn new() -> Self {
         XY { x: 0.0, y: 0.0 }
@@ -11,10 +17,6 @@ impl XY {
 
     pub fn from_coordinates(x: f64, y: f64) -> Self {
         XY { x, y }
-    }
-
-    pub fn to_string(&self) -> String {
-        format!("XY({}, {})", self.x, self.y)
     }
 
     pub fn coord(&self) -> (f64, f64) {
@@ -309,7 +311,6 @@ impl Mul<&XY> for f64 {
 use crate::Matrix2d;
 
 impl MulAssign<&Matrix2d> for XY {
-    
     fn mul_assign(&mut self, other: &Matrix2d) {
         let x = self.x;
         let y = self.y;
@@ -320,7 +321,7 @@ impl MulAssign<&Matrix2d> for XY {
 
 impl Mul<&Matrix2d> for &XY {
     type Output = XY;
-    
+
     fn mul(self, other: &Matrix2d) -> Self::Output {
         let x = self.x;
         let y = self.y;

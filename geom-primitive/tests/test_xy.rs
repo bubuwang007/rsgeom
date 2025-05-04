@@ -41,6 +41,12 @@ mod tests {
     }
 
     #[test]
+    fn test_to_string() {
+        let p = XY::from_coordinates(1.0, 2.0);
+        assert_eq!(p.to_string(), "XY(1, 2)");
+    }
+
+    #[test]
     fn test_coord() {
         let mut p = XY::new();
         p.set_coord(5.0, 6.0);

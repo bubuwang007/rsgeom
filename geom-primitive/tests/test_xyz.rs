@@ -28,9 +28,7 @@ mod tests {
     fn test_coord() {
         let mut p = XYZ::new();
         p.set_coord(7.0, 8.0, 9.0);
-        assert_eq!(p.x, 7.0);
-        assert_eq!(p.y, 8.0);
-        assert_eq!(p.z, 9.0);
+        assert_eq!(p.coord(), (7.0, 8.0, 9.0));
     }
 
     #[test]
@@ -70,6 +68,10 @@ mod tests {
         assert_eq!(p_mut[2], 6.0);
     }
 
-    
-    
+    #[test]
+    fn test_to_string() {
+        let p = XYZ::from_coordinates(1.0, 2.0, 3.0);
+        assert_eq!(p.to_string(), "XYZ(1, 2, 3)");
+    }
+
 }
