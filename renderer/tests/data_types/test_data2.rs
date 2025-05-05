@@ -25,3 +25,9 @@ fn test_to_string() {
     let a = F32_2::new(1.0, 2.5);
     assert_eq!(a.to_string(), "f32(1, 2.5)");
 }
+
+#[test]
+fn test_print() {
+    let a = F32_2::new(1.0, 2.5);
+    a.print("POINT");
+}

@@ -11,6 +11,13 @@ impl<T> Data2<T> {
     }
 }
 
+impl<T: std::fmt::Display> Data2<T> {
+    #[inline(always)]
+    pub fn print(&self, lable: &str) {
+        println!("{}: {} {}", lable, self.x, self.y);
+    }
+}
+
 impl<T: std::fmt::Display> std::fmt::Display for Data2<T> {
     #[inline(always)]
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

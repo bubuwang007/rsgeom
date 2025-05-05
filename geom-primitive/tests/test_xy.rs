@@ -6,7 +6,7 @@ mod tests {
 
     #[test]
     fn test_init() {
-        let p1 = XY::new();
+        let p1 = XY::<f64>::new();
         assert_eq!(p1.x, 0.0);
         assert_eq!(p1.y, 0.0);
         let p2 = XY::from_coordinates(1.0, 2.0);

@@ -1,7 +1,9 @@
+use num_traits::Float;
+
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct XY {
-    pub x: f64,
-    pub y: f64,
+pub struct XY<T = f64> {
+    pub x: T,
+    pub y: T,
 }
 
 impl std::fmt::Display for XY {
@@ -10,34 +12,40 @@ impl std::fmt::Display for XY {
     }
 }
 
-impl XY {
+impl<T> XY<T>
+where
+    T: Copy + Default + Float,
+{
     pub fn new() -> Self {
-        XY { x: 0.0, y: 0.0 }
+        XY {
+            x: Default::default(),
+            y: Default::default(),
+        }
     }
 
-    pub fn from_coordinates(x: f64, y: f64) -> Self {
+    pub fn from_coordinates(x: T, y: T) -> Self {
         XY { x, y }
     }
 
-    pub fn coord(&self) -> (f64, f64) {
+    pub fn coord(&self) -> (T, T) {
         (self.x, self.y)
     }
 
-    pub fn set_coord(&mut self, x: f64, y: f64) {
+    pub fn set_coord(&mut self, x: T, y: T) {
         self.x = x;
         self.y = y;
     }
 
-    pub fn modulus(&self) -> f64 {
+    pub fn modulus(&self) -> T {
         (self.x * self.x + self.y * self.y).sqrt()
     }
 
-    pub fn square_modulus(&self) -> f64 {
+    pub fn square_modulus(&self) -> T {
         self.x * self.x + self.y * self.y
     }
 
-    pub fn is_equal(&self, other: &Self, tolerance: f64) -> bool {
-        let val: f64 = self.x - other.x;
+    pub fn is_equal(&self, other: &Self, tolerance: T) -> bool {
+        let val: T = self.x - other.x;
         if val.abs() > tolerance {
             return false;
         }
@@ -48,27 +56,27 @@ impl XY {
         true
     }
 
-    pub fn cross(&self, other: &Self) -> f64 {
+    pub fn cross(&self, other: &Self) -> T {
         self.x * other.y - self.y * other.x
     }
 
-    pub fn cross_abs(&self, other: &Self) -> f64 {
+    pub fn cross_abs(&self, other: &Self) -> T {
         self.cross(other).abs()
     }
 
-    pub fn square_cross_abs(&self, other: &Self) -> f64 {
+    pub fn square_cross_abs(&self, other: &Self) -> T {
         self.cross(other).powi(2)
     }
 
-    pub fn dot(&self, other: &Self) -> f64 {
+    pub fn dot(&self, other: &Self) -> T {
         self.x * other.x + self.y * other.y
     }
 
     pub fn normalize(&mut self) {
-        let modulus = self.modulus();
-        if modulus > 0.0 {
-            self.x /= modulus;
-            self.y /= modulus;
+        let modulus: T = self.modulus();
+        if modulus > T::zero() {
+            self.x = self.x / modulus;
+            self.y = self.y / modulus;
         }
     }
 
@@ -90,25 +98,25 @@ impl XY {
     }
 
     // a1 * xy1 + a2 * xy2
-    pub fn set_linear_form_2(&mut self, a1: f64, xy1: &XY, a2: f64, xy2: &XY) {
+    pub fn set_linear_form_2(&mut self, a1: T, xy1: &XY<T>, a2: T, xy2: &XY<T>) {
         self.x = a1 * xy1.x + a2 * xy2.x;
         self.y = a1 * xy1.y + a2 * xy2.y;
     }
 
     // a1 * xy1 + xy2
-    pub fn set_linear_form_2a(&mut self, a1: f64, xy1: &XY, xy2: &XY) {
+    pub fn set_linear_form_2a(&mut self, a1: T, xy1: &XY<T>, xy2: &XY<T>) {
         self.x = a1 * xy1.x + xy2.x;
         self.y = a1 * xy1.y + xy2.y;
     }
 
     // xy1 + xy2
-    pub fn set_linear_form_2b(&mut self, xy1: &XY, xy2: &XY) {
+    pub fn set_linear_form_2b(&mut self, xy1: &XY<T>, xy2: &XY<T>) {
         self.x = xy1.x + xy2.x;
         self.y = xy1.y + xy2.y;
     }
 
     // a1 * xy1 + a2 * xy2 + xy3
-    pub fn set_linear_form_3(&mut self, a1: f64, xy1: &XY, a2: f64, xy2: &XY, xy3: &XY) {
+    pub fn set_linear_form_3(&mut self, a1: T, xy1: &XY<T>, a2: T, xy2: &XY<T>, xy3: &XY<T>) {
         self.x = a1 * xy1.x + a2 * xy2.x + xy3.x;
         self.y = a1 * xy1.y + a2 * xy2.y + xy3.y;
     }
@@ -116,8 +124,11 @@ impl XY {
 
 use std::ops::{Index, IndexMut};
 
-impl Index<usize> for XY {
-    type Output = f64;
+impl<T> Index<usize> for XY<T>
+where
+    T: Copy + Default + Float,
+{
+    type Output = T;
 
     fn index(&self, index: usize) -> &Self::Output {
         match index {
@@ -128,7 +139,10 @@ impl Index<usize> for XY {
     }
 }
 
-impl IndexMut<usize> for XY {
+impl<T> IndexMut<usize> for XY<T>
+where
+    T: Copy + Default + Float,
+{
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
         match index {
             0 => &mut self.x,
@@ -141,8 +155,11 @@ impl IndexMut<usize> for XY {
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
 // XY = -&XY
-impl Neg for &XY {
-    type Output = XY;
+impl<T> Neg for &XY<T>
+where
+    T: Copy + Default + Float,
+{
+    type Output = XY<T>;
 
     fn neg(self) -> Self::Output {
         self.reverse_new()
@@ -150,18 +167,24 @@ impl Neg for &XY {
 }
 
 // XY += &XY
-impl AddAssign<&XY> for XY {
-    fn add_assign(&mut self, other: &XY) {
-        self.x += other.x;
-        self.y += other.y;
+impl<T> AddAssign<&XY<T>> for XY<T>
+where
+    T: Copy + Default + Float,
+{
+    fn add_assign(&mut self, other: &XY<T>) {
+        self.x = self.x + other.x;
+        self.y = self.y + other.y;
     }
 }
 
 // XY = &XY + &XY
-impl Add<&XY> for &XY {
-    type Output = XY;
+impl<T> Add<&XY<T>> for &XY<T>
+where
+    T: Copy + Default + Float,
+{
+    type Output = XY<T>;
 
-    fn add(self, other: &XY) -> Self::Output {
+    fn add(self, other: &XY<T>) -> Self::Output {
         XY {
             x: self.x + other.x,
             y: self.y + other.y,
@@ -169,19 +192,25 @@ impl Add<&XY> for &XY {
     }
 }
 
-// XY += f64
-impl AddAssign<f64> for XY {
-    fn add_assign(&mut self, other: f64) {
-        self.x += other;
-        self.y += other;
+// XY += T
+impl<T> AddAssign<T> for XY<T>
+where
+    T: Copy + Default + Float,
+{
+    fn add_assign(&mut self, other: T) {
+        self.x = self.x + other;
+        self.y = self.y + other;
     }
 }
 
-// XY = &XY + f64
-impl Add<f64> for XY {
-    type Output = XY;
+// XY = &XY + T
+impl<T> Add<T> for XY<T>
+where
+    T: Copy + Default + Float,
+{
+    type Output = XY<T>;
 
-    fn add(self, other: f64) -> Self::Output {
+    fn add(self, other: T) -> Self::Output {
         XY {
             x: self.x + other,
             y: self.y + other,
@@ -189,17 +218,25 @@ impl Add<f64> for XY {
     }
 }
 
-impl SubAssign<&XY> for XY {
-    fn sub_assign(&mut self, other: &XY) {
-        self.x -= other.x;
-        self.y -= other.y;
+// XY -= &XY
+impl<T> SubAssign<&XY<T>> for XY<T>
+where
+    T: Copy + Default + Float,
+{
+    fn sub_assign(&mut self, other: &XY<T>) {
+        self.x = self.x - other.x;
+        self.y = self.y - other.y;
     }
 }
 
-impl Sub<&XY> for &XY {
-    type Output = XY;
+// XY = &XY - &XY
+impl<T> Sub<&XY<T>> for &XY<T>
+where
+    T: Copy + Default + Float,
+{
+    type Output = XY<T>;
 
-    fn sub(self, other: &XY) -> Self::Output {
+    fn sub(self, other: &XY<T>) -> Self::Output {
         XY {
             x: self.x - other.x,
             y: self.y - other.y,
@@ -207,10 +244,14 @@ impl Sub<&XY> for &XY {
     }
 }
 
-impl Sub<f64> for &XY {
-    type Output = XY;
+// XY = &XY - T
+impl<T> Sub<T> for &XY<T>
+where
+    T: Copy + Default + Float,
+{
+    type Output = XY<T>;
 
-    fn sub(self, other: f64) -> Self::Output {
+    fn sub(self, other: T) -> Self::Output {
         XY {
             x: self.x - other,
             y: self.y - other,
@@ -218,19 +259,18 @@ impl Sub<f64> for &XY {
     }
 }
 
-impl SubAssign<f64> for XY {
-    fn sub_assign(&mut self, other: f64) {
-        self.x -= other;
-        self.y -= other;
+// XY -= T
+impl<T> SubAssign<T> for XY<T>
+where
+    T: Copy + Default + Float,
+{
+    fn sub_assign(&mut self, other: T) {
+        self.x = self.x + other;
+        self.y = self.y + other;
     }
 }
 
-impl DivAssign<&XY> for XY {
-    fn div_assign(&mut self, other: &XY) {
-        self.x /= other.x;
-        self.y /= other.y;
-    }
-}
+
 
 impl Div<&XY> for &XY {
     type Output = XY;
@@ -240,6 +280,14 @@ impl Div<&XY> for &XY {
             x: self.x / other.x,
             y: self.y / other.y,
         }
+    }
+}
+
+
+impl DivAssign<&XY> for XY {
+    fn div_assign(&mut self, other: &XY) {
+        self.x /= other.x;
+        self.y /= other.y;
     }
 }
 
