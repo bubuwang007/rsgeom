@@ -1,15 +1,15 @@
-use renderer::data_types::float2::Float2;
+use renderer::data_types::F32_2;
 
 #[test]
 fn test_init() {
-    let a = Float2::new(1.0, 2.0);
+    let a = F32_2::new(1.0, 2.0);
     assert_eq!(a.x, 1.0);
     assert_eq!(a.y, 2.0);
 }
 
 #[test]
 fn test_index() {
-    let a = Float2::new(1.0, 2.0);
+    let a = F32_2::new(1.0, 2.0);
     assert_eq!(a[0], 1.0);
     assert_eq!(a[1], 2.0);
 
@@ -22,6 +22,6 @@ fn test_index() {
 
 #[test]
 fn test_to_string() {
-    let a = Float2::new(1.0, 2.5);
-    assert_eq!(a.to_string(), "Float2(1, 2.5)");
+    let a = F32_2::new(1.0, 2.5);
+    assert_eq!(a.to_string(), "f32(1, 2.5)");
 }
