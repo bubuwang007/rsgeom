@@ -6,7 +6,10 @@ pub struct XY<T = f64> {
     pub y: T,
 }
 
-impl std::fmt::Display for XY {
+impl<T> std::fmt::Display for XY<T>
+where
+    T: std::fmt::Display,
+{
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "XY({}, {})", self.x, self.y)
     }
@@ -64,7 +67,7 @@ where
         self.cross(other).abs()
     }
 
-    pub fn square_cross_abs(&self, other: &Self) -> T {
+    pub fn square_cross(&self, other: &Self) -> T {
         self.cross(other).powi(2)
     }
 
@@ -126,7 +129,7 @@ use std::ops::{Index, IndexMut};
 
 impl<T> Index<usize> for XY<T>
 where
-    T: Copy + Default + Float,
+    T: Copy + Float,
 {
     type Output = T;
 
@@ -141,7 +144,7 @@ where
 
 impl<T> IndexMut<usize> for XY<T>
 where
-    T: Copy + Default + Float,
+    T: Copy + Float,
 {
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
         match index {
@@ -152,24 +155,29 @@ where
     }
 }
 
-use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
+use std::ops::Neg;
 
 // XY = -&XY
 impl<T> Neg for &XY<T>
 where
-    T: Copy + Default + Float,
+    T: Copy + Float,
 {
     type Output = XY<T>;
 
     fn neg(self) -> Self::Output {
-        self.reverse_new()
+        XY {
+            x: -self.x,
+            y: -self.y,
+        }
     }
 }
+
+use std::ops::{Add, AddAssign};
 
 // XY += &XY
 impl<T> AddAssign<&XY<T>> for XY<T>
 where
-    T: Copy + Default + Float,
+    T: Copy + Float,
 {
     fn add_assign(&mut self, other: &XY<T>) {
         self.x = self.x + other.x;
@@ -177,10 +185,21 @@ where
     }
 }
 
+// XY += T
+impl<T> AddAssign<T> for XY<T>
+where
+    T: Copy + Float,
+{
+    fn add_assign(&mut self, other: T) {
+        self.x = self.x + other;
+        self.y = self.y + other;
+    }
+}
+
 // XY = &XY + &XY
 impl<T> Add<&XY<T>> for &XY<T>
 where
-    T: Copy + Default + Float,
+    T: Copy + Float,
 {
     type Output = XY<T>;
 
@@ -192,21 +211,10 @@ where
     }
 }
 
-// XY += T
-impl<T> AddAssign<T> for XY<T>
-where
-    T: Copy + Default + Float,
-{
-    fn add_assign(&mut self, other: T) {
-        self.x = self.x + other;
-        self.y = self.y + other;
-    }
-}
-
 // XY = &XY + T
 impl<T> Add<T> for XY<T>
 where
-    T: Copy + Default + Float,
+    T: Copy + Float,
 {
     type Output = XY<T>;
 
@@ -218,10 +226,12 @@ where
     }
 }
 
+use std::ops::{Sub, SubAssign};
+
 // XY -= &XY
 impl<T> SubAssign<&XY<T>> for XY<T>
 where
-    T: Copy + Default + Float,
+    T: Copy + Float,
 {
     fn sub_assign(&mut self, other: &XY<T>) {
         self.x = self.x - other.x;
@@ -229,10 +239,21 @@ where
     }
 }
 
+// XY -= T
+impl<T> SubAssign<T> for XY<T>
+where
+    T: Copy + Float,
+{
+    fn sub_assign(&mut self, other: T) {
+        self.x = self.x - other;
+        self.y = self.y - other;
+    }
+}
+
 // XY = &XY - &XY
 impl<T> Sub<&XY<T>> for &XY<T>
 where
-    T: Copy + Default + Float,
+    T: Copy + Float,
 {
     type Output = XY<T>;
 
@@ -247,7 +268,7 @@ where
 // XY = &XY - T
 impl<T> Sub<T> for &XY<T>
 where
-    T: Copy + Default + Float,
+    T: Copy + Float,
 {
     type Output = XY<T>;
 
@@ -259,23 +280,38 @@ where
     }
 }
 
-// XY -= T
-impl<T> SubAssign<T> for XY<T>
+use std::ops::{Div, DivAssign};
+
+// XY /= T
+impl<T> DivAssign<&XY<T>> for XY<T>
 where
-    T: Copy + Default + Float,
+    T: Copy + Float,
 {
-    fn sub_assign(&mut self, other: T) {
-        self.x = self.x + other;
-        self.y = self.y + other;
+    fn div_assign(&mut self, other: &XY<T>) {
+        self.x = self.x / other.x;
+        self.y = self.y / other.y;
     }
 }
 
+// XY /= T
+impl<T> DivAssign<T> for XY<T>
+where
+    T: Copy + Float,
+{
+    fn div_assign(&mut self, other: T) {
+        self.x = self.x / other;
+        self.y = self.y / other;
+    }
+}
 
+// XY = &XY / &XY
+impl<T> Div<&XY<T>> for &XY<T>
+where
+    T: Copy + Float,
+{
+    type Output = XY<T>;
 
-impl Div<&XY> for &XY {
-    type Output = XY;
-
-    fn div(self, other: &XY) -> Self::Output {
+    fn div(self, other: &XY<T>) -> Self::Output {
         XY {
             x: self.x / other.x,
             y: self.y / other.y,
@@ -283,18 +319,14 @@ impl Div<&XY> for &XY {
     }
 }
 
+// XY = &XY / T
+impl<T> Div<T> for &XY<T>
+where
+    T: Copy + Float,
+{
+    type Output = XY<T>;
 
-impl DivAssign<&XY> for XY {
-    fn div_assign(&mut self, other: &XY) {
-        self.x /= other.x;
-        self.y /= other.y;
-    }
-}
-
-impl Div<f64> for &XY {
-    type Output = XY;
-
-    fn div(self, other: f64) -> Self::Output {
+    fn div(self, other: T) -> Self::Output {
         XY {
             x: self.x / other,
             y: self.y / other,
@@ -302,24 +334,48 @@ impl Div<f64> for &XY {
     }
 }
 
-impl DivAssign<f64> for XY {
-    fn div_assign(&mut self, other: f64) {
-        self.x /= other;
-        self.y /= other;
+use std::ops::{Mul, MulAssign};
+
+// XY *= &XY
+impl<T> MulAssign<&XY<T>> for XY<T>
+where
+    T: Copy + Float,
+{
+    fn mul_assign(&mut self, other: &XY<T>) {
+        self.x = self.x * other.x;
+        self.y = self.y * other.y;
     }
 }
 
-impl MulAssign<&XY> for XY {
-    fn mul_assign(&mut self, other: &XY) {
-        self.x *= other.x;
-        self.y *= other.y;
+// XY *= T
+impl<T> MulAssign<T> for XY<T>
+where
+    T: Copy + Float,
+{
+    fn mul_assign(&mut self, other: T) {
+        self.x = self.x * other;
+        self.y = self.y * other;
     }
 }
 
-impl Mul<&XY> for &XY {
-    type Output = XY;
+// TODO
+impl MulAssign<&crate::Matrix2d> for XY {
+    fn mul_assign(&mut self, other: &crate::Matrix2d) {
+        let x = self.x;
+        let y = self.y;
+        self.x = other[0][0] * x + other[0][1] * y;
+        self.y = other[1][0] * x + other[1][1] * y;
+    }
+}
 
-    fn mul(self, other: &XY) -> Self::Output {
+// XY = &XY * &XY
+impl<T> Mul<&XY<T>> for &XY<T>
+where
+    T: Copy + Float,
+{
+    type Output = XY<T>;
+
+    fn mul(self, other: &XY<T>) -> Self::Output {
         XY {
             x: self.x * other.x,
             y: self.y * other.y,
@@ -327,10 +383,14 @@ impl Mul<&XY> for &XY {
     }
 }
 
-impl Mul<f64> for &XY {
-    type Output = XY;
+// XY = &XY * T
+impl<T> Mul<T> for &XY<T>
+where
+    T: Copy + Float,
+{
+    type Output = XY<T>;
 
-    fn mul(self, other: f64) -> Self::Output {
+    fn mul(self, other: T) -> Self::Output {
         XY {
             x: self.x * other,
             y: self.y * other,
@@ -338,13 +398,7 @@ impl Mul<f64> for &XY {
     }
 }
 
-impl MulAssign<f64> for XY {
-    fn mul_assign(&mut self, other: f64) {
-        self.x *= other;
-        self.y *= other;
-    }
-}
-
+// XY = f64 * &XY
 impl Mul<&XY> for f64 {
     type Output = XY;
 
@@ -356,21 +410,23 @@ impl Mul<&XY> for f64 {
     }
 }
 
-use crate::Matrix2d;
+// XY = f32 * &XY
+impl Mul<&XY<f32>> for f32 {
+    type Output = XY<f32>;
 
-impl MulAssign<&Matrix2d> for XY {
-    fn mul_assign(&mut self, other: &Matrix2d) {
-        let x = self.x;
-        let y = self.y;
-        self.x = other[0][0] * x + other[0][1] * y;
-        self.y = other[1][0] * x + other[1][1] * y;
+    fn mul(self, other: &XY<f32>) -> Self::Output {
+        XY {
+            x: self * other.x,
+            y: self * other.y,
+        }
     }
 }
 
-impl Mul<&Matrix2d> for &XY {
+// TODO
+impl Mul<&crate::Matrix2d> for &XY {
     type Output = XY;
 
-    fn mul(self, other: &Matrix2d) -> Self::Output {
+    fn mul(self, other: &crate::Matrix2d) -> Self::Output {
         let x = self.x;
         let y = self.y;
         XY {

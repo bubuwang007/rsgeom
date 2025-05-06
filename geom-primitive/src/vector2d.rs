@@ -7,7 +7,6 @@ pub struct Vector2d {
 }
 
 impl Vector2d {
-
     pub const VX: Vector2d = Vector2d {
         xy: XY { x: 1.0, y: 0.0 },
     };
@@ -166,7 +165,7 @@ impl Vector2d {
     }
 
     pub fn square_cross_abs(&self, other: &Self) -> f64 {
-        self.xy.square_cross_abs(&other.xy())
+        self.xy.square_cross(&other.xy())
     }
 
     pub fn dot(&self, other: &Self) -> f64 {
@@ -209,7 +208,14 @@ impl Vector2d {
     }
 
     // a1 * v1 + a2 * v2 + v3
-    pub fn set_linear_form_3(&mut self, a1: f64, v1: &Vector2d, a2: f64, v2: &Vector2d, v3: &Vector2d) {
+    pub fn set_linear_form_3(
+        &mut self,
+        a1: f64,
+        v1: &Vector2d,
+        a2: f64,
+        v2: &Vector2d,
+        v3: &Vector2d,
+    ) {
         self.xy.set_linear_form_3(a1, v1.xy(), a2, v2.xy(), v3.xy());
     }
 
@@ -251,7 +257,6 @@ impl Vector2d {
     }
 
     // transform
-
 }
 
 use std::ops::{Index, IndexMut};
