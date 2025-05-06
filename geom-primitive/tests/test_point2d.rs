@@ -7,7 +7,7 @@ mod tests {
     #[test]
     fn test_init() {
 
-        let p2 = Point2d::new();
+        let p2: Point2d<f64> = Point2d::new();
         assert_eq!(p2.x(), 0.0);
         assert_eq!(p2.y(), 0.0);
 
