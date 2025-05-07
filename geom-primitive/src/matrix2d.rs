@@ -1,9 +1,9 @@
+use crate::xy::XY;
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Matrix2d {
     m: [[f64; 2]; 2],
 }
-
-use crate::xy::XY;
 
 impl Matrix2d {
     pub fn new() -> Self {

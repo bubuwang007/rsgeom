@@ -6,7 +6,7 @@ mod tests {
 
     #[test]
     fn test_init() {
-        let v1 = Vector2d::new();
+        let v1: Vector2d<f64> = Vector2d::new();
         assert_eq!(v1.x(), 0.0);
         assert_eq!(v1.y(), 0.0);
 
@@ -21,7 +21,7 @@ mod tests {
 
         let p1 = Point2d::from_coordinates(10.0, 15.0);
         let p2 = Point2d::from_coordinates(20.0, 25.0);
-        let v4 = Vector2d::from_points(&p1, &p2);
+        let v4 = Vector2d::from_2point2d(&p1, &p2);
         assert_eq!(v4.x(), 10.0);
         assert_eq!(v4.y(), 10.0);
     }
@@ -163,7 +163,7 @@ mod tests {
         assert_eq!(v1.x(), 0.0);
         assert_eq!(v1.y(), 1.0);
 
-        let mut v1 = Vector2d::from_coordinates(10.0, 0.0);
+        let mut v1: Vector2d= Vector2d::from_coordinates(10.0, 0.0);
         let v2 = Vector2d::from_coordinates(1.0, 1.0);
         v1.mirror_by_vector2d(&v2);
         println!("v1: {:?}", v1);

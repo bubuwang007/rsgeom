@@ -1,5 +1,5 @@
+use crate::fconst::FloatWithConst;
 use crate::xy::XY;
-use num_traits::Float;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Point2d<T = f64> {
@@ -17,7 +17,7 @@ where
 
 impl<T> Point2d<T>
 where
-    T: Copy + Default + Float,
+    T: Copy + Default + FloatWithConst,
 {
     pub fn new() -> Self {
         Point2d { xy: XY::new() }
@@ -96,22 +96,43 @@ where
     // pub fn rotate_by_point2d(&mut self, other: &Self, angle: f64) {
     // }
 
-    pub fn scale_by_point2d(&mut self, other: &Self, scale: f64) {
+    pub fn scale_by_point2d(&mut self, other: &Self, scale: T) {
         let mut xy1 = other.xy;
-        xy1 *= T::from(1.0 - scale).unwrap();
+        xy1 *= T::from(1.0).unwrap() - scale;
         self.xy *= T::from(scale).unwrap();
         self.xy += &xy1;
     }
 
+    pub fn scale_by_point2d_new(&self, other: &Self, scale: T) -> Self {
+        let mut result = *self;
+        result.scale_by_point2d(other, scale);
+        result
+    }
+
+    pub fn translate_by_2point2d(&mut self, p1: &Self, p2: &Self) {
+        self.xy += &p2.xy;
+        self.xy -= &p1.xy;
+    }
+
+    pub fn translate_by_2point2d_new(&self, p1: &Self, p2: &Self) -> Self {
+        let mut result = *self;
+        result.translate_by_2point2d(p1, p2);
+        result
+    }
+
     // pub fn translate_by_vec2d(){}
     // pub fn translate_by_vec2d_new(){}
-    // pub fn transform
+    // pub fn transform() {}
+    // pub fn transform_new() {}
 }
 
 use std::ops::{Index, IndexMut};
 
-impl Index<usize> for Point2d {
-    type Output = f64;
+impl<T> Index<usize> for Point2d<T>
+where
+    T: Copy + FloatWithConst,
+{
+    type Output = T;
 
     fn index(&self, index: usize) -> &Self::Output {
         match index {
@@ -122,7 +143,10 @@ impl Index<usize> for Point2d {
     }
 }
 
-impl IndexMut<usize> for Point2d {
+impl<T> IndexMut<usize> for Point2d<T>
+where
+    T: Copy + FloatWithConst,
+{
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
         match index {
             0 => &mut self.xy.x,

@@ -1,12 +1,13 @@
 use crate::point2d::Point2d;
 use crate::xy::XY;
+// use num_traits::Float;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Vector2d {
-    xy: XY,
+pub struct Vector2d<T = f64> {
+    xy: XY<T>,
 }
 
-impl Vector2d {
+impl Vector2d<f64> {
     pub const VX: Vector2d = Vector2d {
         xy: XY { x: 1.0, y: 0.0 },
     };
@@ -14,98 +15,121 @@ impl Vector2d {
     pub const VY: Vector2d = Vector2d {
         xy: XY { x: 0.0, y: 1.0 },
     };
+}
 
+impl Vector2d<f32> {
+    pub const VX: Vector2d<f32> = Vector2d {
+        xy: XY { x: 1.0, y: 0.0 },
+    };
+
+    pub const VY: Vector2d<f32> = Vector2d {
+        xy: XY { x: 0.0, y: 1.0 },
+    };
+}
+
+impl<T> std::fmt::Display for Vector2d<T>
+where
+    T: std::fmt::Display,
+{
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Vector2d({}, {})", self.xy.x, self.xy.y)
+    }
+}
+
+impl<T> Vector2d<T>
+where
+    T: Copy + Default + crate::fconst::FloatWithConst,
+{
     pub fn new() -> Self {
         Vector2d { xy: XY::new() }
     }
 
     // pub fn from_direction2d(x: f64, y: f64) -> Self {}
 
-    pub fn from_coordinates(x: f64, y: f64) -> Self {
+    pub fn from_coordinates(x: T, y: T) -> Self {
         Vector2d {
             xy: XY::from_coordinates(x, y),
         }
     }
 
-    pub fn from_xy(xy: XY) -> Self {
+    pub fn from_xy(xy: XY<T>) -> Self {
         Vector2d { xy }
     }
 
-    pub fn from_points(p1: &Point2d, p2: &Point2d) -> Self {
+    pub fn from_2point2d(p1: &Point2d<T>, p2: &Point2d<T>) -> Self {
         Vector2d {
             xy: XY::from_coordinates(p2.x() - p1.x(), p2.y() - p1.y()),
         }
     }
 
-    pub fn to_string(&self) -> String {
-        format!("Vector2d({}, {})", self.xy.x, self.xy.y)
-    }
-
-    pub fn x(&self) -> f64 {
+    pub fn x(&self) -> T {
         self.xy.x
     }
 
-    pub fn y(&self) -> f64 {
+    pub fn set_x(&mut self, x: T) {
+        self.xy.x = x;
+    }
+
+    pub fn y(&self) -> T {
         self.xy.y
     }
 
-    pub fn xy(&self) -> &XY {
+    pub fn set_y(&mut self, y: T) {
+        self.xy.y = y;
+    }
+
+    pub fn xy(&self) -> &XY<T> {
         &self.xy
     }
 
-    pub fn coord(&self) -> (f64, f64) {
-        (self.xy.x, self.xy.y)
-    }
-
-    pub fn set_x(&mut self, x: f64) {
-        self.xy.x = x;
-    }
-
-    pub fn set_y(&mut self, y: f64) {
-        self.xy.y = y;
-    }
-
-    pub fn set_xy(&mut self, xy: XY) {
+    pub fn set_xy(&mut self, xy: XY<T>) {
         self.xy = xy;
     }
 
-    pub fn set_coord(&mut self, x: f64, y: f64) {
+    pub fn coord(&self) -> (T, T) {
+        (self.xy.x, self.xy.y)
+    }
+
+    pub fn set_coord(&mut self, x: T, y: T) {
         self.xy.x = x;
         self.xy.y = y;
     }
 
-    pub fn length(&self) -> f64 {
+    pub fn length(&self) -> T {
         self.xy.modulus()
     }
 
-    pub fn square_length(&self) -> f64 {
+    pub fn square_length(&self) -> T {
         self.xy.square_modulus()
     }
 
-    pub fn angle_to_vector(&self, other: &Self) -> Result<f64, &'static str> {
+    pub fn angle_to_vector(&self, other: &Self) -> Result<T, &'static str> {
         let mag = self.length();
         let other_mag = other.length();
-        if mag <= std::f64::MIN_POSITIVE || other_mag <= std::f64::MIN_POSITIVE {
+        if mag <= T::min_positive_value() || other_mag <= T::min_positive_value() {
             return Err("Cannot calculate angle to zero vector");
         }
         let d = mag * other_mag;
         let cosinus = self.xy.dot(&other.xy()) / d;
         let sinus = self.xy.cross(&other.xy()) / d;
 
-        if cosinus > -0.70710678118655 && cosinus < 0.70710678118655 {
-            if sinus > 0.0 {
+        let zero = T::from(0.0).unwrap();
+        if cosinus > T::from(-0.70710678118655).unwrap()
+            && cosinus < T::from(0.70710678118655).unwrap()
+        {
+            if sinus > zero {
                 return Ok(cosinus.acos());
             } else {
                 return Ok(-cosinus.acos());
             }
         } else {
-            if cosinus > 0.0 {
+            if cosinus > zero {
                 return Ok(sinus.asin());
             } else {
-                if sinus > 0.0 {
-                    return Ok(std::f64::consts::PI - sinus.asin());
+                if sinus > zero {
+                    return Ok(T::pi() - sinus.asin());
                 } else {
-                    return Ok(-std::f64::consts::PI - sinus.asin());
+                    return Ok(-T::pi() - sinus.asin());
                 }
             }
         }
@@ -114,8 +138,8 @@ impl Vector2d {
     pub fn is_equal(
         &self,
         other: &Self,
-        linear_tolerance: f64,
-        angular_tolerance: f64,
+        linear_tolerance: T,
+        angular_tolerance: T,
     ) -> Result<bool, &'static str> {
         let mag = self.length();
         let other_mag = other.length();
@@ -129,8 +153,8 @@ impl Vector2d {
         Ok(is_equal_length)
     }
 
-    pub fn is_orthogonal(&self, other: &Self, ang_tolerance: f64) -> Result<bool, &'static str> {
-        let ang = (std::f64::consts::FRAC_PI_2 - self.angle_to_vector(other)?.abs()).abs();
+    pub fn is_orthogonal(&self, other: &Self, ang_tolerance: T) -> Result<bool, &'static str> {
+        let ang = (T::frac_pi_2() - self.angle_to_vector(other)?.abs()).abs();
         if ang < ang_tolerance {
             return Ok(true);
         } else {
@@ -138,37 +162,37 @@ impl Vector2d {
         }
     }
 
-    pub fn is_opposite(&self, other: &Self, ang_tolerance: f64) -> Result<bool, &'static str> {
+    pub fn is_opposite(&self, other: &Self, ang_tolerance: T) -> Result<bool, &'static str> {
         let ang = self.angle_to_vector(other)?.abs();
-        if (std::f64::consts::PI - ang).abs() < ang_tolerance {
+        if (T::pi() - ang).abs() < ang_tolerance {
             return Ok(true);
         } else {
             return Ok(false);
         }
     }
 
-    pub fn is_parallel(&self, other: &Self, ang_tolerance: f64) -> Result<bool, &'static str> {
+    pub fn is_parallel(&self, other: &Self, ang_tolerance: T) -> Result<bool, &'static str> {
         let ang = self.angle_to_vector(other)?.abs();
-        if (std::f64::consts::PI - ang).abs() < ang_tolerance || ang < ang_tolerance {
+        if (T::pi() - ang).abs() < ang_tolerance || ang < ang_tolerance {
             return Ok(true);
         } else {
             return Ok(false);
         }
     }
 
-    pub fn cross(&self, other: &Self) -> f64 {
+    pub fn cross(&self, other: &Self) -> T {
         self.xy.cross(&other.xy())
     }
 
-    pub fn cross_abs(&self, other: &Self) -> f64 {
+    pub fn cross_abs(&self, other: &Self) -> T {
         self.xy.cross_abs(&other.xy())
     }
 
-    pub fn square_cross_abs(&self, other: &Self) -> f64 {
+    pub fn square_cross_abs(&self, other: &Self) -> T {
         self.xy.square_cross(&other.xy())
     }
 
-    pub fn dot(&self, other: &Self) -> f64 {
+    pub fn dot(&self, other: &Self) -> T {
         self.xy.dot(&other.xy())
     }
 
@@ -193,28 +217,28 @@ impl Vector2d {
     }
 
     // a1 * v1 + a2 * v2
-    pub fn set_linear_form_2(&mut self, a1: f64, v1: &Vector2d, a2: f64, v2: &Vector2d) {
+    pub fn set_linear_form_2(&mut self, a1: T, v1: &Vector2d<T>, a2: T, v2: &Vector2d<T>) {
         self.xy.set_linear_form_2(a1, v1.xy(), a2, v2.xy());
     }
 
     // a1 * v1 + v2
-    pub fn set_linear_form_2a(&mut self, a1: f64, v1: &Vector2d, v2: &Vector2d) {
+    pub fn set_linear_form_2a(&mut self, a1: T, v1: &Vector2d<T>, v2: &Vector2d<T>) {
         self.xy.set_linear_form_2a(a1, v1.xy(), v2.xy());
     }
 
     // v1 + v2
-    pub fn set_linear_form_2b(&mut self, v1: &Vector2d, v2: &Vector2d) {
+    pub fn set_linear_form_2b(&mut self, v1: &Vector2d<T>, v2: &Vector2d<T>) {
         self.xy.set_linear_form_2b(v1.xy(), v2.xy());
     }
 
     // a1 * v1 + a2 * v2 + v3
     pub fn set_linear_form_3(
         &mut self,
-        a1: f64,
-        v1: &Vector2d,
-        a2: f64,
-        v2: &Vector2d,
-        v3: &Vector2d,
+        a1: T,
+        v1: &Vector2d<T>,
+        a2: T,
+        v2: &Vector2d<T>,
+        v3: &Vector2d<T>,
     ) {
         self.xy.set_linear_form_3(a1, v1.xy(), a2, v2.xy(), v3.xy());
     }
@@ -224,14 +248,16 @@ impl Vector2d {
     // 存在疑问，结果永远是other
     pub fn mirror_by_vector2d(&mut self, other: &Self) {
         let d = other.xy().modulus();
-        if d > std::f64::MIN_POSITIVE {
+        if d > T::min_positive_value() {
             let x = other.x();
             let y = other.y();
             let a = x / d;
             let b = y / d;
-            let m1 = 2.0 * a * b;
-            self.set_x(((2.0 * a * a) - 1.0) * x + m1 * y);
-            self.set_y(m1 * x + ((2.0 * b * b - 1.0) * y));
+            let one = T::from(1.0).unwrap();
+            let two = T::from(2.0).unwrap();
+            let m1 = two * a * b;
+            self.set_x(((two * a * a) - one) * x + m1 * y);
+            self.set_y(m1 * x + ((two * b * b - one) * y));
         }
     }
 
@@ -246,11 +272,11 @@ impl Vector2d {
 
     // }
 
-    pub fn scale(&mut self, scale: f64) {
-        *self *= scale;
+    pub fn scale(&mut self, scale: T) {
+        self.xy *= scale;
     }
 
-    pub fn scale_new(&self, scale: f64) -> Self {
+    pub fn scale_new(&self, scale: T) -> Self {
         let mut result = *self;
         result.scale(scale);
         result
@@ -261,8 +287,8 @@ impl Vector2d {
 
 use std::ops::{Index, IndexMut};
 
-impl Index<usize> for Vector2d {
-    type Output = f64;
+impl<T> Index<usize> for Vector2d<T> {
+    type Output = T;
 
     fn index(&self, index: usize) -> &Self::Output {
         match index {
@@ -273,7 +299,7 @@ impl Index<usize> for Vector2d {
     }
 }
 
-impl IndexMut<usize> for Vector2d {
+impl<T> IndexMut<usize> for Vector2d<T> {
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
         match index {
             0 => &mut self.xy.x,

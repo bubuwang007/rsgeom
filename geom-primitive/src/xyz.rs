@@ -1,4 +1,4 @@
-use num_traits::Float;
+use crate::fconst::FloatWithConst;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct XYZ<T = f64> {
@@ -18,7 +18,7 @@ where
 
 impl<T> XYZ<T>
 where
-    T: Copy + Default + Float,
+    T: Copy + Default + FloatWithConst,
 {
     pub fn new() -> Self {
         XYZ {
@@ -240,7 +240,7 @@ use std::ops::Neg;
 // XYZ = -XYZ
 impl<T> Neg for &XYZ<T>
 where
-    T: Copy + Float,
+    T: Copy + FloatWithConst,
 {
     type Output = XYZ<T>;
 
@@ -258,7 +258,7 @@ use std::ops::{Add, AddAssign};
 // XYZ += &XYZ
 impl<T> AddAssign<&XYZ<T>> for XYZ<T>
 where
-    T: Copy + Float,
+    T: Copy + FloatWithConst,
 {
     fn add_assign(&mut self, other: &XYZ<T>) {
         self.x = self.x + other.x;
@@ -270,7 +270,7 @@ where
 // XYZ += T
 impl<T> AddAssign<T> for XYZ<T>
 where
-    T: Copy + Float,
+    T: Copy + FloatWithConst,
 {
     fn add_assign(&mut self, other: T) {
         self.x = self.x + other;
@@ -282,7 +282,7 @@ where
 // XYZ = &XYZ + &XYZ
 impl<T> Add<&XYZ<T>> for &XYZ<T>
 where
-    T: Copy + Float,
+    T: Copy + FloatWithConst,
 {
     type Output = XYZ<T>;
 
@@ -298,7 +298,7 @@ where
 // XYZ = &XYZ + T
 impl<T> Add<T> for XYZ<T>
 where
-    T: Copy + Float,
+    T: Copy + FloatWithConst,
 {
     type Output = XYZ<T>;
 
@@ -316,7 +316,7 @@ use std::ops::{Sub, SubAssign};
 // XYZ -= &XYZ
 impl<T> SubAssign<&XYZ<T>> for XYZ<T>
 where
-    T: Copy + Float,
+    T: Copy + FloatWithConst,
 {
     fn sub_assign(&mut self, other: &XYZ<T>) {
         self.x = self.x - other.x;
@@ -328,7 +328,7 @@ where
 // XYZ -= T
 impl<T> SubAssign<T> for XYZ<T>
 where
-    T: Copy + Float,
+    T: Copy + FloatWithConst,
 {
     fn sub_assign(&mut self, other: T) {
         self.x = self.x - other;
@@ -340,7 +340,7 @@ where
 // XYZ = &XYZ - &XYZ
 impl<T> Sub<&XYZ<T>> for &XYZ<T>
 where
-    T: Copy + Float,
+    T: Copy + FloatWithConst,
 {
     type Output = XYZ<T>;
 
@@ -356,7 +356,7 @@ where
 // XYZ = &XYZ - T
 impl<T> Sub<T> for &XYZ<T>
 where
-    T: Copy + Float,
+    T: Copy + FloatWithConst,
 {
     type Output = XYZ<T>;
 
@@ -374,7 +374,7 @@ use std::ops::{Div, DivAssign};
 // XYZ /= T
 impl<T> DivAssign<&XYZ<T>> for XYZ<T>
 where
-    T: Copy + Float,
+    T: Copy + FloatWithConst,
 {
     fn div_assign(&mut self, other: &XYZ<T>) {
         self.x = self.x / other.x;
@@ -386,7 +386,7 @@ where
 // XYZ /= T
 impl<T> DivAssign<T> for XYZ<T>
 where
-    T: Copy + Float,
+    T: Copy + FloatWithConst,
 {
     fn div_assign(&mut self, other: T) {
         self.x = self.x / other;
@@ -398,7 +398,7 @@ where
 // XYZ = &XYZ / &XYZ
 impl<T> Div<&XYZ<T>> for &XYZ<T>
 where
-    T: Copy + Float,
+    T: Copy + FloatWithConst,
 {
     type Output = XYZ<T>;
 
@@ -414,7 +414,7 @@ where
 // XYZ = &XYZ / T
 impl<T> Div<T> for &XYZ<T>
 where
-    T: Copy + Float,
+    T: Copy + FloatWithConst,
 {
     type Output = XYZ<T>;
 
@@ -432,7 +432,7 @@ use std::ops::{Mul, MulAssign};
 // XYZ *= &XYZ
 impl<T> MulAssign<&XYZ<T>> for XYZ<T>
 where
-    T: Copy + Float,
+    T: Copy + FloatWithConst,
 {
     fn mul_assign(&mut self, other: &XYZ<T>) {
         self.x = self.x * other.x;
@@ -444,7 +444,7 @@ where
 // XYZ *= T
 impl<T> MulAssign<T> for XYZ<T>
 where
-    T: Copy + Float,
+    T: Copy + FloatWithConst,
 {
     fn mul_assign(&mut self, other: T) {
         self.x = self.x * other;
@@ -466,7 +466,7 @@ where
 // XYZ = &XYZ * &XYZ
 impl<T> Mul<&XYZ<T>> for &XYZ<T>
 where
-    T: Copy + Float,
+    T: Copy + FloatWithConst,
 {
     type Output = XYZ<T>;
 
@@ -482,7 +482,7 @@ where
 // XYZ = &XYZ * T
 impl<T> Mul<T> for &XYZ<T>
 where
-    T: Copy + Float,
+    T: Copy + FloatWithConst,
 {
     type Output = XYZ<T>;
 

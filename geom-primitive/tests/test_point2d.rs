@@ -1,4 +1,4 @@
-use geom_primitive::point2d::Point2d;
+use geom_primitive::Point2d;
 
 #[cfg(test)]
 mod tests {
@@ -6,7 +6,6 @@ mod tests {
 
     #[test]
     fn test_init() {
-
         let p2: Point2d<f64> = Point2d::new();
         assert_eq!(p2.x(), 0.0);
         assert_eq!(p2.y(), 0.0);
@@ -70,7 +69,7 @@ mod tests {
     }
 
     #[test]
-    fn test_scale_by_point2d(){
+    fn test_scale_by_point2d() {
         let mut p1 = Point2d::from_coordinates(1.0, 2.0);
         let p2 = Point2d::from_coordinates(3.0, 4.0);
         p1.scale_by_point2d(&p2, 0.5);
@@ -78,4 +77,17 @@ mod tests {
         assert_eq!(p1.y(), 3.0);
     }
 
+    #[test]
+    fn test_translate() {
+        let mut p1 = Point2d::from_coordinates(1.0, 2.0);
+        let p2 = Point2d::from_coordinates(3.0, 4.0);
+        let p3 = Point2d::from_coordinates(5.0, 6.0);
+        p1.translate_by_2point2d(&p2, &p3);
+        assert_eq!(p1.x(), 3.0);
+        assert_eq!(p1.y(), 4.0);
+
+        let p4 = p1.translate_by_2point2d_new(&p2, &p3);
+        assert_eq!(p4.x(), 5.0);
+        assert_eq!(p4.y(), 6.0);
+    }
 }
