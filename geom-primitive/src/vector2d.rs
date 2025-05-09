@@ -330,6 +330,7 @@ impl<T> AddAssign<&Vector2d<T>> for Vector2d<T> {
     }
 }
 
+// Vector2d += T
 impl<T> AddAssign<T> for Vector2d<T> {
     fn add_assign(&mut self, other: T) {
         self.xy += other;
@@ -356,8 +357,43 @@ impl<T> Add<T> for &Vector2d<T> {
     }
 }
 
-impl DivAssign<f64> for Vector2d {
-    fn div_assign(&mut self, other: f64) {
+use std::ops::{Sub, SubAssign};
+
+impl<T> SubAssign<&Vector2d<T>> for Vector2d<T> {
+    fn sub_assign(&mut self, other: &Vector2d<T>) {
+        self.xy -= &other.xy;
+    }
+}
+
+impl SubAssign<f64> for Vector2d {
+    fn sub_assign(&mut self, other: f64) {
+        self.xy -= other;
+    }
+}
+
+impl Sub<&Vector2d> for &Vector2d {
+    type Output = Vector2d;
+
+    fn sub(self, other: &Vector2d) -> Self::Output {
+        Vector2d {
+            xy: &self.xy - &other.xy,
+        }
+    }
+}
+
+impl Sub<f64> for &Vector2d {
+    type Output = Vector2d;
+
+    fn sub(self, other: f64) -> Self::Output {
+        Vector2d {
+            xy: &self.xy - other,
+        }
+    }
+}
+
+
+impl<T> DivAssign<T> for Vector2d<T> {
+    fn div_assign(&mut self, other: T) {
         self.xy /= other;
     }
 }
@@ -412,34 +448,3 @@ impl Mul<&Vector2d> for f64 {
     }
 }
 
-impl SubAssign<&Vector2d> for Vector2d {
-    fn sub_assign(&mut self, other: &Vector2d) {
-        self.xy -= &other.xy;
-    }
-}
-
-impl SubAssign<f64> for Vector2d {
-    fn sub_assign(&mut self, other: f64) {
-        self.xy -= other;
-    }
-}
-
-impl Sub<&Vector2d> for &Vector2d {
-    type Output = Vector2d;
-
-    fn sub(self, other: &Vector2d) -> Self::Output {
-        Vector2d {
-            xy: &self.xy - &other.xy,
-        }
-    }
-}
-
-impl Sub<f64> for &Vector2d {
-    type Output = Vector2d;
-
-    fn sub(self, other: f64) -> Self::Output {
-        Vector2d {
-            xy: &self.xy - other,
-        }
-    }
-}
