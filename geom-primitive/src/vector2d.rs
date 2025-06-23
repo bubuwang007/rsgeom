@@ -309,50 +309,91 @@ impl<T> IndexMut<usize> for Vector2d<T> {
     }
 }
 
-use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
+// use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
-impl Neg for &Vector2d {
-    type Output = Vector2d;
+use std::ops::Neg;
+
+impl<T> Neg for &Vector2d<T> {
+    type Output = Vector2d<T>;
 
     fn neg(self) -> Self::Output {
         Vector2d { xy: -&self.xy }
     }
 }
 
-impl AddAssign<&Vector2d> for Vector2d {
-    fn add_assign(&mut self, other: &Vector2d) {
+use std::ops::{Add, AddAssign};
+
+// Vector2d += &Vector2d
+impl<T> AddAssign<&Vector2d<T>> for Vector2d<T> {
+    fn add_assign(&mut self, other: &Vector2d<T>) {
         self.xy += &other.xy;
     }
 }
 
-impl AddAssign<f64> for Vector2d {
-    fn add_assign(&mut self, other: f64) {
+// Vector2d += T
+impl<T> AddAssign<T> for Vector2d<T> {
+    fn add_assign(&mut self, other: T) {
         self.xy += other;
     }
 }
 
-impl Add<&Vector2d> for &Vector2d {
-    type Output = Vector2d;
+impl<T> Add<&Vector2d<T>> for &Vector2d<T> {
+    type Output = Vector2d<T>;
 
-    fn add(self, other: &Vector2d) -> Self::Output {
+    fn add(self, other: &Vector2d<T>) -> Self::Output {
         Vector2d {
             xy: &self.xy + &other.xy,
         }
     }
 }
 
-impl Add<f64> for &Vector2d {
-    type Output = Vector2d;
+impl<T> Add<T> for &Vector2d<T> {
+    type Output = Vector2d<T>;
 
-    fn add(self, other: f64) -> Self::Output {
+    fn add(self, other: T) -> Self::Output {
         Vector2d {
             xy: self.xy + other,
         }
     }
 }
 
-impl DivAssign<f64> for Vector2d {
-    fn div_assign(&mut self, other: f64) {
+use std::ops::{Sub, SubAssign};
+
+impl<T> SubAssign<&Vector2d<T>> for Vector2d<T> {
+    fn sub_assign(&mut self, other: &Vector2d<T>) {
+        self.xy -= &other.xy;
+    }
+}
+
+impl SubAssign<f64> for Vector2d {
+    fn sub_assign(&mut self, other: f64) {
+        self.xy -= other;
+    }
+}
+
+impl Sub<&Vector2d> for &Vector2d {
+    type Output = Vector2d;
+
+    fn sub(self, other: &Vector2d) -> Self::Output {
+        Vector2d {
+            xy: &self.xy - &other.xy,
+        }
+    }
+}
+
+impl Sub<f64> for &Vector2d {
+    type Output = Vector2d;
+
+    fn sub(self, other: f64) -> Self::Output {
+        Vector2d {
+            xy: &self.xy - other,
+        }
+    }
+}
+
+
+impl<T> DivAssign<T> for Vector2d<T> {
+    fn div_assign(&mut self, other: T) {
         self.xy /= other;
     }
 }
@@ -407,34 +448,3 @@ impl Mul<&Vector2d> for f64 {
     }
 }
 
-impl SubAssign<&Vector2d> for Vector2d {
-    fn sub_assign(&mut self, other: &Vector2d) {
-        self.xy -= &other.xy;
-    }
-}
-
-impl SubAssign<f64> for Vector2d {
-    fn sub_assign(&mut self, other: f64) {
-        self.xy -= other;
-    }
-}
-
-impl Sub<&Vector2d> for &Vector2d {
-    type Output = Vector2d;
-
-    fn sub(self, other: &Vector2d) -> Self::Output {
-        Vector2d {
-            xy: &self.xy - &other.xy,
-        }
-    }
-}
-
-impl Sub<f64> for &Vector2d {
-    type Output = Vector2d;
-
-    fn sub(self, other: f64) -> Self::Output {
-        Vector2d {
-            xy: &self.xy - other,
-        }
-    }
-}

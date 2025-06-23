@@ -1,5 +1,4 @@
 use geom_primitive::Point3d;
-
 #[cfg(test)]
 mod tests {
     use super::*;
