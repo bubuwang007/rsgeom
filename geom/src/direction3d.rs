@@ -2,33 +2,37 @@ use crate::traits::FloatWithConst;
 use crate::xyz::XYZ;
 
 #[derive(Debug, Clone, Copy)]
-pub struct Point3d<T = f64> {
-    xyz: XYZ<T>,
+pub struct Direction3d<T = f64> {
+    pub xyz: XYZ<T>,
 }
 
-impl<T> std::fmt::Display for Point3d<T>
+impl<T> std::fmt::Display for Direction3d<T>
 where
     T: std::fmt::Display,
 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Point3d({}, {}, {})", self.xyz.x, self.xyz.y, self.xyz.z)
+        write!(
+            f,
+            "Direction3d({}, {}, {})",
+            self.xyz.x, self.xyz.y, self.xyz.z
+        )
     }
 }
 
-impl<T> Point3d<T>
+impl<T> Direction3d<T>
 where
     T: Copy + Default + FloatWithConst,
 {
     pub fn new() -> Self {
-        Point3d { xyz: XYZ::new() }
+        Direction3d { xyz: XYZ::new() }
     }
 
     pub fn from_xyz(xyz: XYZ<T>) -> Self {
-        Point3d { xyz }
+        Direction3d { xyz }
     }
 
     pub fn from_coords(x: T, y: T, z: T) -> Self {
-        Point3d {
+        Direction3d {
             xyz: XYZ::from_coords(x, y, z),
         }
     }
@@ -67,7 +71,7 @@ where
         self.xyz.z = z;
     }
 
-    pub fn get_xyz(&self) -> XYZ<T> {
+    pub fn xyz(&self) -> XYZ<T> {
         self.xyz
     }
 

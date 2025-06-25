@@ -2,33 +2,37 @@ use crate::traits::FloatWithConst;
 use crate::xyz::XYZ;
 
 #[derive(Debug, Clone, Copy)]
-pub struct Point3d<T = f64> {
-    xyz: XYZ<T>,
+pub struct Vector3d<T = f64> {
+    pub xyz: XYZ<T>,
 }
 
-impl<T> std::fmt::Display for Point3d<T>
+impl<T> std::fmt::Display for Vector3d<T>
 where
     T: std::fmt::Display,
 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Point3d({}, {}, {})", self.xyz.x, self.xyz.y, self.xyz.z)
+        write!(
+            f,
+            "Vector3d({}, {}, {})",
+            self.xyz.x, self.xyz.y, self.xyz.z
+        )
     }
 }
 
-impl<T> Point3d<T>
+impl<T> Vector3d<T>
 where
     T: Copy + Default + FloatWithConst,
 {
     pub fn new() -> Self {
-        Point3d { xyz: XYZ::new() }
+        Vector3d { xyz: XYZ::new() }
     }
 
     pub fn from_xyz(xyz: XYZ<T>) -> Self {
-        Point3d { xyz }
+        Vector3d { xyz }
     }
 
     pub fn from_coords(x: T, y: T, z: T) -> Self {
-        Point3d {
+        Vector3d {
             xyz: XYZ::from_coords(x, y, z),
         }
     }
@@ -75,7 +79,7 @@ where
         self.xyz = xyz;
     }
 
-    pub fn is_equal(&self, other: &Self, tolerance: T) -> bool {
-        self.xyz.is_equal(&other.xyz, tolerance)
+    pub fn is_equal(&self, other: &Self, epsilon: T) -> bool {
+        self.xyz.is_equal(&other.xyz, epsilon)
     }
 }
