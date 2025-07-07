@@ -70,3 +70,13 @@ where
         self.xy.is_equal(&other.xy, tolerance)
     }
 }
+
+use std::convert::From;
+impl<T> From<(T, T)> for Point2d<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn from(coords: (T, T)) -> Self {
+        Point2d::from_coords(coords.0, coords.1)
+    }
+}

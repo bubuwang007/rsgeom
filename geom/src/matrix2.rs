@@ -12,7 +12,7 @@ where
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "Matrix2([{}, {}], [{}, {}])",
+            "Matrix2([[{}, {}], [{}, {}]])",
             self.m[0][0], self.m[0][1], self.m[1][0], self.m[1][1]
         )
     }
@@ -86,5 +86,16 @@ where
     pub fn set_diagonal(&mut self, values: [T; 2]) {
         self.m[0][0] = values[0];
         self.m[1][1] = values[1];
+    }
+
+    pub fn is_equal(&self, other: &Self, tolerance: T) -> bool {
+        for i in 0..2 {
+            for j in 0..2 {
+                if (self.m[i][j] - other.m[i][j]).abs() > tolerance {
+                    return false;
+                }
+            }
+        }
+        true
     }
 }
