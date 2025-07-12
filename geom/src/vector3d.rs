@@ -83,3 +83,12 @@ where
         self.xyz.is_equal(&other.xyz, epsilon)
     }
 }
+
+impl<T> From<(T, T, T)> for Vector3d<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn from(coords: (T, T, T)) -> Self {
+        Vector3d::from_coords(coords.0, coords.1, coords.2)
+    }
+}

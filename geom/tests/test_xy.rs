@@ -51,3 +51,20 @@ mod tests {
         assert!(p1.is_equal(&p3, 0.2));
     }
 }
+
+#[cfg(test)]
+mod test_methods {
+    use super::*;
+
+    #[test]
+    fn test_length() {
+        let p1 = XY::from_coords(3.0, 4.0);
+        assert_eq!(p1.length(), 5.0);
+    }
+
+    #[test]
+    fn test_square_length() {
+        let p1 = XY::from_coords(3.0, 4.0);
+        assert_eq!(p1.square_length(), 25.0);
+    }
+}

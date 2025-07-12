@@ -67,3 +67,66 @@ where
         true
     }
 }
+
+impl<T> From<(T, T)> for XY<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn from(coords: (T, T)) -> Self {
+        XY {
+            x: coords.0,
+            y: coords.1,
+        }
+    }
+}
+
+impl<T> XY<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    pub fn length(&self) -> T {
+        (self.x * self.x + self.y * self.y).sqrt()
+    }
+
+    pub fn square_length(&self) -> T {
+        self.x * self.x + self.y * self.y
+    }
+
+    pub fn normalize(&mut self) {
+        let d = self.length();
+        if d <= T::min_positive() {
+            panic!("Cannot normalize zero length vector");
+        }
+        self.x /= d;
+        self.y /= d;
+    }
+
+    pub fn normalize_new(&self) -> Self {
+        let mut new_xy = *self;
+        new_xy.normalize();
+        new_xy
+    }
+
+    pub fn cross(&self, other: &Self) -> T {
+        self.x * other.y - self.y * other.x
+    }
+
+    pub fn cross_abs(&self, other: &Self) -> T {
+        self.cross(other).abs()
+    }
+
+    pub fn dot(&self, other: &Self) -> T {
+        self.x * other.x + self.y * other.y
+    }
+
+    pub fn reverse(&mut self) {
+        self.x = -self.x;
+        self.y = -self.y;
+    }
+
+    pub fn reverse_new(&self) -> Self {
+        let mut result = *self;
+        result.reverse();
+        result
+    }
+}

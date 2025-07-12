@@ -58,8 +58,8 @@ where
         self.xy.y = y;
     }
 
-    pub fn xy(&self) -> XY<T> {
-        self.xy
+    pub fn get_xy(&self) -> &XY<T> {
+        &self.xy
     }
 
     pub fn set_xy(&mut self, xy: XY<T>) {
@@ -68,5 +68,14 @@ where
 
     pub fn is_equal(&self, other: &Self, tolerance: T) -> bool {
         self.xy.is_equal(&other.xy, tolerance)
+    }
+}
+
+impl<T> From<(T, T)> for Vector2d<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn from(coords: (T, T)) -> Self {
+        Vector2d::from_coords(coords.0, coords.1)
     }
 }

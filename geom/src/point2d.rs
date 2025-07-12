@@ -58,8 +58,8 @@ where
         self.xy.y = y;
     }
 
-    pub fn get_xy(&self) -> XY<T> {
-        self.xy
+    pub fn get_xy(&self) -> &XY<T> {
+        &self.xy
     }
 
     pub fn set_xy(&mut self, xy: XY<T>) {
@@ -71,7 +71,6 @@ where
     }
 }
 
-use std::convert::From;
 impl<T> From<(T, T)> for Point2d<T>
 where
     T: Copy + Default + FloatWithConst,

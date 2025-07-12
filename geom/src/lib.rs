@@ -1,5 +1,9 @@
 pub(crate) mod traits;
 
+pub mod axis2d;
+pub mod axis3d;
+pub mod coordinate_system2d;
+pub mod coordinate_system3d;
 pub mod direction2d;
 pub mod direction3d;
 pub mod matrix2;
@@ -10,9 +14,11 @@ pub mod vector2d;
 pub mod vector3d;
 pub mod xy;
 pub mod xyz;
-pub mod axis2;
-pub mod axis3;
 
+pub use axis2d::Axis2d;
+pub use axis3d::Axis3d;
+pub use coordinate_system2d::CoordinateSystem2d;
+pub use coordinate_system3d::CoordinateSystem3d;
 pub use direction2d::Direction2d;
 pub use direction3d::Direction3d;
 pub use matrix2::Matrix2;
@@ -23,5 +29,3 @@ pub use vector2d::Vector2d;
 pub use vector3d::Vector3d;
 pub use xy::XY;
 pub use xyz::XYZ;
-pub use axis2::Axis2;
-pub use axis3::Axis3;

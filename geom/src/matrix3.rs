@@ -130,3 +130,12 @@ where
         true
     }
 }
+
+impl<T> From<[[T; 3]; 3]> for Matrix3<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn from(m: [[T; 3]; 3]) -> Self {
+        Matrix3::from_array(m)
+    }
+}
