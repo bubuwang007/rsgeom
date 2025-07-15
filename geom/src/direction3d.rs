@@ -27,8 +27,11 @@ where
         Direction3d::default()
     }
 
-    pub fn from_xyz(xyz: XYZ<T>) -> Self {
-        let mut d = Direction3d { xyz };
+    pub fn from_xyz<X>(xyz: X) -> Self
+    where 
+        X: Into<XYZ<T>>,
+    {
+        let mut d = Direction3d { xyz: xyz.into() };
         d.normalize();
         d
     }

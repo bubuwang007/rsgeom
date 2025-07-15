@@ -23,8 +23,11 @@ where
         Point3d { xyz: XYZ::new() }
     }
 
-    pub fn from_xyz(xyz: XYZ<T>) -> Self {
-        Point3d { xyz }
+    pub fn from_xyz<X>(xyz: X) -> Self
+    where
+        X: Into<XYZ<T>>,
+    {
+        Point3d { xyz: xyz.into() }
     }
 
     pub fn from_coords(x: T, y: T, z: T) -> Self {

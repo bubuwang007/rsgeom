@@ -80,6 +80,18 @@ where
     }
 }
 
+impl<T> From<[T; 2]> for XY<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn from(coords: [T; 2]) -> Self {
+        XY {
+            x: coords[0],
+            y: coords[1],
+        }
+    }
+}
+
 impl<T> XY<T>
 where
     T: Copy + Default + FloatWithConst,
@@ -88,7 +100,7 @@ where
         (self.x * self.x + self.y * self.y).sqrt()
     }
 
-    pub fn square_length(&self) -> T {
+    pub fn squared_length(&self) -> T {
         self.x * self.x + self.y * self.y
     }
 

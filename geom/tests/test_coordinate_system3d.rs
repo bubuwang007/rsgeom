@@ -18,8 +18,10 @@ mod tests {
 
     #[test]
     fn test_coordinate_system2_from_axis_vydir_vxdir() {
+        let a = (0.0, 0.0, 0.0);
+        let b= (0.0, 0.0, 1.0);
         let cs = CoordinateSystem3d::from_axis_vydir_vxdir(
-            Axis3d::from_location_direction((0.0, 0.0, 0.0), (0.0, 0.0, 1.0)),
+            Axis3d::from_location_direction(a, b),
             (0.0, 1.0, 0.0), // VY direction
             (1.0, 0.0, 0.0), // VX direction
         );

@@ -23,8 +23,11 @@ where
         Direction2d::default()
     }
 
-    pub fn from_xy(xy: XY<T>) -> Self {
-        let mut d = Direction2d { xy };
+    pub fn from_xy<X>(xy: X) -> Self
+    where
+        X: Into<XY<T>>,
+    {
+        let mut d: Direction2d<T> = Direction2d { xy: xy.into() };
         d.normalize();
         d
     }

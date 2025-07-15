@@ -66,8 +66,22 @@ where
         self.xy = xy;
     }
 
-    pub fn is_equal(&self, other: &Self, tolerance: T) -> bool {
-        self.xy.is_equal(&other.xy, tolerance)
+    pub fn is_equal(
+        &self,
+        other: &Self,
+        linear_tolerance: T,
+        angular_tolerance: T,
+    ) -> Result<bool, &'static str> {
+        let mag = self.length();
+        let other_mag = other.length();
+        let val = (mag - other_mag).abs();
+
+        let is_equal_length = val <= linear_tolerance;
+        if (mag > linear_tolerance) && (other_mag > linear_tolerance) {
+            let ang = self.angle_to_vector(other)?.abs();
+            return Ok(is_equal_length && ang <= angular_tolerance);
+        }
+        Ok(is_equal_length)
     }
 }
 
@@ -77,5 +91,59 @@ where
 {
     fn from(coords: (T, T)) -> Self {
         Vector2d::from_coords(coords.0, coords.1)
+    }
+}
+
+impl<T> From<[T; 2]> for Vector2d<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn from(coords: [T; 2]) -> Self {
+        Vector2d::from_coords(coords[0], coords[1])
+    }
+}
+
+impl<T> Vector2d<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    pub fn length(&self) -> T {
+        self.xy.length()
+    }
+
+    pub fn squared_length(&self) -> T {
+        self.xy.squared_length()
+    }
+
+    pub fn angle_to_vector(&self, other: &Self) -> Result<T, &'static str> {
+        let mag = self.length();
+        let other_mag = other.length();
+        if mag <= T::min_positive_value() || other_mag <= T::min_positive_value() {
+            return Err("Cannot calculate angle to zero vector");
+        }
+        let d = mag * other_mag;
+        let cosinus = self.xy.dot(&other.get_xy()) / d;
+        let sinus = self.xy.cross(&other.get_xy()) / d;
+
+        let zero = T::from(0.0).unwrap();
+        if cosinus > T::from(-0.70710678118655).unwrap()
+            && cosinus < T::from(0.70710678118655).unwrap()
+        {
+            if sinus > zero {
+                return Ok(cosinus.acos());
+            } else {
+                return Ok(-cosinus.acos());
+            }
+        } else {
+            if cosinus > zero {
+                return Ok(sinus.asin());
+            } else {
+                if sinus > zero {
+                    return Ok(T::pi() - sinus.asin());
+                } else {
+                    return Ok(-T::pi() - sinus.asin());
+                }
+            }
+        }
     }
 }

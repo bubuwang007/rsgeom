@@ -96,6 +96,19 @@ where
     }
 }
 
+impl<T> From<[T; 3]> for XYZ<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn from(coords: [T; 3]) -> Self {
+        XYZ {
+            x: coords[0],
+            y: coords[1],
+            z: coords[2],
+        }
+    }
+}
+
 impl<T> XYZ<T>
 where
     T: Copy + Default + FloatWithConst,

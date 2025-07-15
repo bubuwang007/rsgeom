@@ -23,8 +23,11 @@ where
         Point2d { xy: XY::new() }
     }
 
-    pub fn from_xy(xy: XY<T>) -> Self {
-        Point2d { xy }
+    pub fn from_xy<X>(xy: X) -> Self
+    where
+        X: Into<XY<T>>
+    {
+        Point2d { xy: xy.into() }
     }
 
     pub fn from_coords(x: T, y: T) -> Self {

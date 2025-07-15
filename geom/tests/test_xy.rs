@@ -63,8 +63,8 @@ mod test_methods {
     }
 
     #[test]
-    fn test_square_length() {
+    fn test_squared_length() {
         let p1 = XY::from_coords(3.0, 4.0);
-        assert_eq!(p1.square_length(), 25.0);
+        assert_eq!(p1.squared_length(), 25.0);
     }
 }
