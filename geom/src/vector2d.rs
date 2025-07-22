@@ -146,4 +146,32 @@ where
             }
         }
     }
+
+    pub fn is_orthogonal(&self, other: &Self, ang_tolerance: T) -> Result<bool, &'static str> {
+        let ang = (T::frac_pi_2() - self.angle_to_vector(other)?.abs()).abs();
+        if ang < ang_tolerance {
+            return Ok(true);
+        } else {
+            return Ok(false);
+        }
+    }
+
+    pub fn is_opposite(&self, other: &Self, ang_tolerance: T) -> Result<bool, &'static str> {
+        let ang = self.angle_to_vector(other)?.abs();
+        if (T::pi() - ang).abs() < ang_tolerance {
+            return Ok(true);
+        } else {
+            return Ok(false);
+        }
+    }
+
+    pub fn is_parallel(&self, other: &Self, ang_tolerance: T) -> Result<bool, &'static str> {
+        let ang = self.angle_to_vector(other)?.abs();
+        if (T::pi() - ang).abs() < ang_tolerance || ang < ang_tolerance {
+            return Ok(true);
+        } else {
+            return Ok(false);
+        }
+    }
+    
 }
