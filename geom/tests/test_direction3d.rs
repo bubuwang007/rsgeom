@@ -74,6 +74,22 @@ mod tests {
     #[test]
     fn test_display() {
         let d = Direction3d::from_coords(4.0, 5.0, 6.0);
-        assert_eq!(format!("{}", d), "Direction3d(0.4558423058385518, 0.5698028822981898, 0.6837634587578276)");
+        assert_eq!(
+            format!("{}", d),
+            "Direction3d(0.4558423058385518, 0.5698028822981898, 0.6837634587578276)"
+        );
+    }
+
+    #[test]
+    fn test_angle() {
+        let d1 = Direction3d::from_coords(1.0, 0.0, 0.0);
+        let d2 = Direction3d::from_coords(0.0, 1.0, 0.0);
+        let d3 = Direction3d::from_coords(1.0, 1.0, 1.0);
+
+        let angle12 = d1.angle(&d2);
+        let angle13 = d1.angle(&d3);
+
+        assert!((angle12 - std::f64::consts::FRAC_PI_2).abs() < 1e-6);
+        assert!((angle13 - 0.955).abs() < 1e-3);
     }
 }

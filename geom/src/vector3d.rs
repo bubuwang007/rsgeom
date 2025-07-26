@@ -92,3 +92,16 @@ where
         Vector3d::from_coords(coords.0, coords.1, coords.2)
     }
 }
+
+impl<T> Vector3d<T> where T: Copy + Default + FloatWithConst 
+{
+    pub fn length(&self) -> T {
+        self.xyz.length()
+    }
+
+    pub fn squared_length(&self) -> T {
+        self.xyz.squared_length()
+    }
+
+    
+}

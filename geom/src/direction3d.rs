@@ -28,7 +28,7 @@ where
     }
 
     pub fn from_xyz<X>(xyz: X) -> Self
-    where 
+    where
         X: Into<XYZ<T>>,
     {
         let mut d = Direction3d { xyz: xyz.into() };
@@ -115,5 +115,61 @@ where
                 T::from(0.0).unwrap(),
             ),
         }
+    }
+}
+
+impl<T> Direction3d<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    pub fn angle(&self, other: &Self) -> T {
+        let cosinus = self.xyz.dot(&other.xyz);
+        if cosinus > T::from(-0.70710678118655).unwrap()
+            && cosinus < T::from(0.70710678118655).unwrap()
+        {
+            return cosinus.acos();
+        } else {
+            let sinus = self.xyz.cross_new(&other.xyz).length();
+            if cosinus < T::from(0.0).unwrap() {
+                return T::pi() - sinus.asin();
+            } else {
+                return sinus.asin();
+            }
+        }
+    }
+
+    pub fn angle_with_ref(&self, vref: &Self) -> T {
+        let ang: T;
+        let xyz = self.xyz.cross_new(&vref.xyz);
+        let cosinus = self.xyz.dot(&vref.xyz);
+        let sinus = xyz.length();
+
+        if cosinus > T::from(-0.70710678118655).unwrap()
+            && cosinus < T::from(0.70710678118655).unwrap()
+        {
+            ang = cosinus.acos();
+        } else {
+            if cosinus < T::from(0.0).unwrap() {
+                ang = T::pi() - sinus.asin();
+            } else {
+                ang = sinus.asin();
+            }
+        }
+        if xyz.dot(&vref.xyz) >= T::from(0.0).unwrap() {
+            ang
+        } else {
+            -ang
+        }
+    }
+
+    pub fn cross(&mut self, other: &Self) {
+        self.xyz.cross(&other.xyz);
+        let ad = self.xyz.length();
+        if ad <= T::min_positive() {
+            panic!("Cannot normalize zero length vector");
+        }
+        self.xyz.x /= ad;
+        self.xyz.y /= ad;
+        self.xyz.z /= ad;
     }
 }

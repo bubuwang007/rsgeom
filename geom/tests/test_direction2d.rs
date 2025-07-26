@@ -71,4 +71,44 @@ mod tests {
         assert!(d1.is_equal(&d2, 0.01));
         assert!(!d1.is_equal(&d3, 0.01));
     }
+
+    #[test]
+    fn test_angle() {
+        let d1 = Direction2d::from_coords(1.0, 0.0);
+        let d2 = Direction2d::from_coords(0.0, 1.0);
+        let d3 = Direction2d::from_coords(1.0, 1.0);
+        let angle = d1.angle(&d2);
+        assert!((angle - std::f64::consts::FRAC_PI_2).abs() < 1e-10, "Angle should be π/2 radians");
+        let angle2 = d1.angle(&d3);
+        assert!((angle2 - std::f64::consts::FRAC_PI_4).abs() < 1e-10, "Angle should be π/4 radians");
+    }
+
+    #[test]
+    fn test_is_orthogonal() {
+        let d1 = Direction2d::from_coords(1.0, 0.0);
+        let d2 = Direction2d::from_coords(0.0, 1.0);
+        let d3 = Direction2d::from_coords(1.0, 1.0);
+        assert!(d1.is_orthogonal(&d2, 1e-10));
+        assert!(!d1.is_orthogonal(&d3, 1e-10));
+    }
+
+    #[test]
+    fn test_is_opposite() {
+        let d1 = Direction2d::from_coords(1.0, 0.0);
+        let d2 = Direction2d::from_coords(-1.0, 0.0);
+        let d3 = Direction2d::from_coords(0.0, 1.0);
+        assert!(d1.is_opposite(&d2, 1e-10));
+        assert!(!d1.is_opposite(&d3, 1e-10));
+    }
+
+    #[test]
+    fn test_is_parallel() {
+        let d1 = Direction2d::from_coords(1.0, 0.0);
+        let d2 = Direction2d::from_coords(2.0, 0.0);
+        let d3 = Direction2d::from_coords(0.0, 1.0);
+        let d4 = Direction2d::from_coords(-1.0, 0.0);
+        assert!(d1.is_parallel(&d2, 1e-10));
+        assert!(!d1.is_parallel(&d3, 1e-10));
+        assert!(d1.is_parallel(&d4, 1e-10));
+    }
 }

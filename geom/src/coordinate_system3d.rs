@@ -41,11 +41,14 @@ where
         VY: Into<Direction3d<T>>,
         VX: Into<Direction3d<T>>,
     {
-        CoordinateSystem3d {
+        let coord = CoordinateSystem3d {
             axis: axis.into(),
             vydir: vydir.into(),
             vxdir: vxdir.into(),
-        }
+        };
+        // coord.vxdir
+
+        coord
     }
 
     pub fn get_origin(&self) -> &Point3d<T> {

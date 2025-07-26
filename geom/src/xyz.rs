@@ -117,7 +117,7 @@ where
         (self.x * self.x + self.y * self.y + self.z * self.z).sqrt()
     }
 
-    pub fn square_length(&self) -> T {
+    pub fn squared_length(&self) -> T {
         self.x * self.x + self.y * self.y + self.z * self.z
     }
 

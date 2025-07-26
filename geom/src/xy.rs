@@ -142,3 +142,67 @@ where
         result
     }
 }
+
+use std::ops::Neg;
+impl<T> Neg for &XY<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    type Output = XY<T>;
+
+    fn neg(self) -> Self::Output {
+        self.reverse_new()
+    }
+}
+
+use std::ops::{Add, AddAssign};
+
+impl<T> AddAssign<&XY<T>> for XY<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn add_assign(&mut self, other: &XY<T>) {
+        self.x = self.x + other.x;
+        self.y = self.y + other.y;
+    }
+}
+
+impl<T> AddAssign<T> for XY<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn add_assign(&mut self, other: T) {
+        self.x = self.x + other;
+        self.y = self.y + other;
+    }
+}
+
+impl<T> Add<&XY<T>> for &XY<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    type Output = XY<T>;
+
+    fn add(self, other: &XY<T>) -> Self::Output {
+        Self::Output {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+
+impl<T> Add<T> for &XY<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    type Output = XY<T>;
+
+    fn add(self, other: T) -> Self::Output {
+        Self::Output {
+            x: self.x + other,
+            y: self.y + other,
+        }
+    }
+}
+
+use std::ops::{Sub, SubAssign};

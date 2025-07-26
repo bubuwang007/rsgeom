@@ -96,3 +96,67 @@ where
         }
     }
 }
+
+impl<T> Direction2d<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    pub fn angle(&self, other: &Self) -> T {
+        let cosinus = self.xy.dot(&other.xy);
+        let sinus = self.xy.cross(&other.xy);
+
+        let zero = T::from(0.0).unwrap();
+        if cosinus > T::from(-0.70710678118655).unwrap()
+            && cosinus < T::from(0.70710678118655).unwrap()
+        {
+            if sinus > zero {
+                return cosinus.acos();
+            } else {
+                return -cosinus.acos();
+            }
+        } else {
+            if cosinus > zero {
+                return sinus.asin();
+            } else {
+                if sinus > zero {
+                    return T::pi() - sinus.asin();
+                } else {
+                    return -T::pi() - sinus.asin();
+                }
+            }
+        }
+    }
+
+    pub fn is_orthogonal(&self, other: &Self, tolerance: T) -> bool {
+        let ang = (T::frac_pi_2() - self.angle(other).abs()).abs();
+        ang <= tolerance
+    }
+
+    pub fn is_opposite(&self, other: &Self, tolerance: T) -> bool {
+        let ang = T::pi() - self.angle(other).abs();
+        ang <= tolerance
+    }
+
+    pub fn is_parallel(&self, other: &Self, tolerance: T) -> bool {
+        let ang = self.angle(other).abs();
+        ang <= tolerance || (T::pi() - ang) <= tolerance
+    }
+
+    pub fn cross(&self, other: &Self) -> T {
+        self.xy.cross(&other.xy)
+    }
+
+    pub fn dot(&self, other: &Self) -> T {
+        self.xy.dot(&other.xy)
+    }
+
+    pub fn reverse(&mut self) {
+        self.xy.reverse();
+    }
+
+    pub fn reverse_new(&self) -> Self {
+        let mut new_dir = *self;
+        new_dir.reverse();
+        new_dir
+    }
+}

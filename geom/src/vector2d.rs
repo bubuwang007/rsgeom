@@ -78,7 +78,7 @@ where
 
         let is_equal_length = val <= linear_tolerance;
         if (mag > linear_tolerance) && (other_mag > linear_tolerance) {
-            let ang = self.angle_to_vector(other)?.abs();
+            let ang = self.angle(other)?.abs();
             return Ok(is_equal_length && ang <= angular_tolerance);
         }
         Ok(is_equal_length)
@@ -115,7 +115,7 @@ where
         self.xy.squared_length()
     }
 
-    pub fn angle_to_vector(&self, other: &Self) -> Result<T, &'static str> {
+    pub fn angle(&self, other: &Self) -> Result<T, &'static str> {
         let mag = self.length();
         let other_mag = other.length();
         if mag <= T::min_positive_value() || other_mag <= T::min_positive_value() {
@@ -148,7 +148,7 @@ where
     }
 
     pub fn is_orthogonal(&self, other: &Self, ang_tolerance: T) -> Result<bool, &'static str> {
-        let ang = (T::frac_pi_2() - self.angle_to_vector(other)?.abs()).abs();
+        let ang = (T::frac_pi_2() - self.angle(other)?.abs()).abs();
         if ang < ang_tolerance {
             return Ok(true);
         } else {
@@ -157,7 +157,7 @@ where
     }
 
     pub fn is_opposite(&self, other: &Self, ang_tolerance: T) -> Result<bool, &'static str> {
-        let ang = self.angle_to_vector(other)?.abs();
+        let ang = self.angle(other)?.abs();
         if (T::pi() - ang).abs() < ang_tolerance {
             return Ok(true);
         } else {
@@ -166,7 +166,7 @@ where
     }
 
     pub fn is_parallel(&self, other: &Self, ang_tolerance: T) -> Result<bool, &'static str> {
-        let ang = self.angle_to_vector(other)?.abs();
+        let ang = self.angle(other)?.abs();
         if (T::pi() - ang).abs() < ang_tolerance || ang < ang_tolerance {
             return Ok(true);
         } else {
