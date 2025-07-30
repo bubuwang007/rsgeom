@@ -67,4 +67,13 @@ mod test_methods {
         let p1 = XY::from_coords(3.0, 4.0);
         assert_eq!(p1.squared_length(), 25.0);
     }
+
+    #[test]
+    fn test_add() {
+        let p1 = XY::from_coords(1.0, 2.0);
+        let p2 = XY::from_coords(3.0, 4.0);
+        let result = &p1 + &p2;
+        assert_eq!(result.x, 4.0);
+        assert_eq!(result.y, 6.0);
+    }
 }

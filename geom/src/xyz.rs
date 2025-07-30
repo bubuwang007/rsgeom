@@ -207,3 +207,268 @@ where
         }
     }
 }
+
+use std::ops::Neg;
+impl<T> Neg for &XYZ<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    type Output = XYZ<T>;
+
+    fn neg(self) -> Self::Output {
+        self.reverse_new()
+    }
+}
+
+use std::ops::{Add, AddAssign};
+impl<T> AddAssign<&XYZ<T>> for XYZ<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn add_assign(&mut self, other: &XYZ<T>) {
+        self.x = self.x + other.x;
+        self.y = self.y + other.y;
+        self.z = self.z + other.z;
+    }
+}
+
+impl<T> AddAssign<T> for XYZ<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn add_assign(&mut self, other: T) {
+        self.x = self.x + other;
+        self.y = self.y + other;
+        self.z = self.z + other;
+    }
+}
+
+impl<T> Add<&XYZ<T>> for &XYZ<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    type Output = XYZ<T>;
+
+    fn add(self, other: &XYZ<T>) -> Self::Output {
+        Self::Output {
+            x: self.x + other.x,
+            y: self.y + other.y,
+            z: self.z + other.z,
+        }
+    }
+}
+
+impl<T> Add<T> for &XYZ<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    type Output = XYZ<T>;
+
+    fn add(self, other: T) -> Self::Output {
+        Self::Output {
+            x: self.x + other,
+            y: self.y + other,
+            z: self.z + other,
+        }
+    }
+}
+
+use std::ops::{Sub, SubAssign};
+impl<T> SubAssign<&XYZ<T>> for XYZ<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn sub_assign(&mut self, other: &XYZ<T>) {
+        self.x = self.x - other.x;
+        self.y = self.y - other.y;
+        self.z = self.z - other.z;
+    }
+}
+
+impl<T> SubAssign<T> for XYZ<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn sub_assign(&mut self, other: T) {
+        self.x = self.x - other;
+        self.y = self.y - other;
+        self.z = self.z - other;
+    }
+}
+
+impl<T> Sub<&XYZ<T>> for &XYZ<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    type Output = XYZ<T>;
+
+    fn sub(self, other: &XYZ<T>) -> Self::Output {
+        Self::Output {
+            x: self.x - other.x,
+            y: self.y - other.y,
+            z: self.z - other.z,
+        }
+    }
+}
+
+impl<T> Sub<T> for &XYZ<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    type Output = XYZ<T>;
+
+    fn sub(self, other: T) -> Self::Output {
+        Self::Output {
+            x: self.x - other,
+            y: self.y - other,
+            z: self.z - other,
+        }
+    }
+}
+
+use std::ops::{Div, DivAssign};
+impl<T> DivAssign<&XYZ<T>> for XYZ<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn div_assign(&mut self, other: &XYZ<T>) {
+        self.x = self.x / other.x;
+        self.y = self.y / other.y;
+        self.z = self.z / other.z;
+    }
+}
+
+impl<T> DivAssign<T> for XYZ<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn div_assign(&mut self, other: T) {
+        self.x = self.x / other;
+        self.y = self.y / other;
+        self.z = self.z / other;
+    }
+}
+
+impl<T> Div<&XYZ<T>> for &XYZ<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    type Output = XYZ<T>;
+
+    fn div(self, other: &XYZ<T>) -> Self::Output {
+        Self::Output {
+            x: self.x / other.x,
+            y: self.y / other.y,
+            z: self.z / other.z,
+        }
+    }
+}
+
+impl<T> Div<T> for &XYZ<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    type Output = XYZ<T>;
+
+    fn div(self, other: T) -> Self::Output {
+        Self::Output {
+            x: self.x / other,
+            y: self.y / other,
+            z: self.z / other,
+        }
+    }
+}
+
+use std::ops::{Mul, MulAssign};
+impl<T> MulAssign<&XYZ<T>> for XYZ<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn mul_assign(&mut self, other: &XYZ<T>) {
+        self.x = self.x * other.x;
+        self.y = self.y * other.y;
+        self.z = self.z * other.z;
+    }
+}
+
+impl<T> MulAssign<T> for XYZ<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn mul_assign(&mut self, other: T) {
+        self.x = self.x * other;
+        self.y = self.y * other;
+        self.z = self.z * other;
+    }
+}
+
+impl<T> Mul<&XYZ<T>> for &XYZ<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    type Output = XYZ<T>;
+
+    fn mul(self, other: &XYZ<T>) -> Self::Output {
+        Self::Output {
+            x: self.x * other.x,
+            y: self.y * other.y,
+            z: self.z * other.z,
+        }
+    }
+}
+
+impl<T> Mul<T> for &XYZ<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    type Output = XYZ<T>;
+
+    fn mul(self, other: T) -> Self::Output {
+        Self::Output {
+            x: self.x * other,
+            y: self.y * other,
+            z: self.z * other,
+        }
+    }
+}
+
+impl Mul<&XYZ<f64>> for f64 {
+    type Output = XYZ<f64>;
+
+    fn mul(self, other: &XYZ) -> Self::Output {
+        Self::Output {
+            x: self * other.x,
+            y: self * other.y,
+            z: self * other.z,
+        }
+    }
+}
+
+impl Mul<&XYZ<f32>> for f32 {
+    type Output = XYZ<f32>;
+
+    fn mul(self, other: &XYZ<f32>) -> Self::Output {
+        Self::Output {
+            x: self * other.x,
+            y: self * other.y,
+            z: self * other.z,
+        }
+    }
+}
+
+impl<T> Mul<&crate::Matrix3<T>> for &XYZ<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    type Output = XYZ<T>;
+
+    fn mul(self, other: &crate::Matrix3<T>) -> Self::Output {
+        let x = self.x;
+        let y = self.y;
+        Self::Output {
+            x: other.m[0][0] * x + other.m[0][1] * y + other.m[0][2] * self.z,
+            y: other.m[1][0] * x + other.m[1][1] * y + other.m[1][2] * self.z,
+            z: other.m[2][0] * x + other.m[2][1] * y + other.m[2][2] * self.z,
+        }
+    }
+}

@@ -1,5 +1,5 @@
 use crate::traits::FloatWithConst;
-use crate::xyz::XYZ;
+use crate::XYZ;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Point3d<T = f64> {

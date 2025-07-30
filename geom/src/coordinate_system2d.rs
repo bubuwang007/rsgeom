@@ -1,5 +1,5 @@
-use crate::direction2d::Direction2d;
-use crate::point2d::Point2d;
+use crate::Direction2d;
+use crate::Point2d;
 use crate::traits::FloatWithConst;
 
 #[derive(Debug, Clone, Copy)]

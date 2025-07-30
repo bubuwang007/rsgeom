@@ -1,5 +1,5 @@
+use crate::XY;
 use crate::traits::FloatWithConst;
-use crate::xy::XY;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Vector2d<T = f64> {
@@ -103,6 +103,15 @@ where
     }
 }
 
+impl<T> From<crate::XY<T>> for Vector2d<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn from(xy: crate::XY<T>) -> Self {
+        Vector2d::from_coords(xy.x, xy.y)
+    }
+}
+
 impl<T> Vector2d<T>
 where
     T: Copy + Default + FloatWithConst,
@@ -173,5 +182,4 @@ where
             return Ok(false);
         }
     }
-    
 }

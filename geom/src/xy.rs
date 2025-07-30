@@ -156,7 +156,6 @@ where
 }
 
 use std::ops::{Add, AddAssign};
-
 impl<T> AddAssign<&XY<T>> for XY<T>
 where
     T: Copy + Default + FloatWithConst,
@@ -206,3 +205,186 @@ where
 }
 
 use std::ops::{Sub, SubAssign};
+impl<T> SubAssign<&XY<T>> for XY<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn sub_assign(&mut self, other: &XY<T>) {
+        self.x = self.x - other.x;
+        self.y = self.y - other.y;
+    }
+}
+
+impl<T> SubAssign<T> for XY<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn sub_assign(&mut self, other: T) {
+        self.x = self.x - other;
+        self.y = self.y - other;
+    }
+}
+
+impl<T> Sub<&XY<T>> for &XY<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    type Output = XY<T>;
+
+    fn sub(self, other: &XY<T>) -> Self::Output {
+        Self::Output {
+            x: self.x - other.x,
+            y: self.y - other.y,
+        }
+    }
+}
+
+impl<T> Sub<T> for &XY<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    type Output = XY<T>;
+
+    fn sub(self, other: T) -> Self::Output {
+        Self::Output {
+            x: self.x - other,
+            y: self.y - other,
+        }
+    }
+}
+
+use std::ops::{Div, DivAssign};
+impl<T> DivAssign<&XY<T>> for XY<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn div_assign(&mut self, other: &XY<T>) {
+        self.x = self.x / other.x;
+        self.y = self.y / other.y;
+    }
+}
+
+impl<T> DivAssign<T> for XY<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn div_assign(&mut self, other: T) {
+        self.x = self.x / other;
+        self.y = self.y / other;
+    }
+}
+
+impl<T> Div<&XY<T>> for &XY<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    type Output = XY<T>;
+
+    fn div(self, other: &XY<T>) -> Self::Output {
+        Self::Output {
+            x: self.x / other.x,
+            y: self.y / other.y,
+        }
+    }
+}
+
+impl<T> Div<T> for &XY<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    type Output = XY<T>;
+
+    fn div(self, other: T) -> Self::Output {
+        Self::Output {
+            x: self.x / other,
+            y: self.y / other,
+        }
+    }
+}
+
+use std::ops::{Mul, MulAssign};
+impl<T> MulAssign<&XY<T>> for XY<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn mul_assign(&mut self, other: &XY<T>) {
+        self.x = self.x * other.x;
+        self.y = self.y * other.y;
+    }
+}
+
+impl<T> MulAssign<T> for XY<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    fn mul_assign(&mut self, other: T) {
+        self.x = self.x * other;
+        self.y = self.y * other;
+    }
+}
+
+impl<T> Mul<&XY<T>> for &XY<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    type Output = XY<T>;
+
+    fn mul(self, other: &XY<T>) -> Self::Output {
+        Self::Output {
+            x: self.x * other.x,
+            y: self.y * other.y,
+        }
+    }
+}
+
+impl<T> Mul<T> for &XY<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    type Output = XY<T>;
+
+    fn mul(self, other: T) -> Self::Output {
+        Self::Output {
+            x: self.x * other,
+            y: self.y * other,
+        }
+    }
+}
+
+impl Mul<&XY<f64>> for f64 {
+    type Output = XY<f64>;
+
+    fn mul(self, other: &XY) -> Self::Output {
+        Self::Output {
+            x: self * other.x,
+            y: self * other.y,
+        }
+    }
+}
+
+impl Mul<&XY<f32>> for f32 {
+    type Output = XY<f32>;
+
+    fn mul(self, other: &XY<f32>) -> Self::Output {
+        Self::Output {
+            x: self * other.x,
+            y: self * other.y,
+        }
+    }
+}
+
+impl<T> Mul<&crate::Matrix2<T>> for &XY<T>
+where
+    T: Copy + Default + FloatWithConst,
+{
+    type Output = XY<T>;
+
+    fn mul(self, other: &crate::Matrix2<T>) -> Self::Output {
+        let x = self.x;
+        let y = self.y;
+        Self::Output {
+            x: other.m[0][0] * x + other.m[0][1] * y,
+            y: other.m[1][0] * x + other.m[1][1] * y,
+        }
+    }
+}

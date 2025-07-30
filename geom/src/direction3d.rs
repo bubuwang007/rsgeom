@@ -1,5 +1,5 @@
+use crate::XYZ;
 use crate::traits::FloatWithConst;
-use crate::xyz::XYZ;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Direction3d<T = f64> {
@@ -168,8 +168,27 @@ where
         if ad <= T::min_positive() {
             panic!("Cannot normalize zero length vector");
         }
-        self.xyz.x /= ad;
-        self.xyz.y /= ad;
-        self.xyz.z /= ad;
+        self.xyz /= ad;
+    }
+
+    pub fn cross_new(&self, other: &Self) -> Self {
+        let mut d = self.clone();
+        d.cross(other);
+        d
+    }
+
+    pub fn cross_cross(&mut self, d1: &Self, d2: &Self) {
+        self.xyz.cross_cross(&d1.xyz, &d2.xyz);
+        let ad = self.xyz.length();
+        if ad <= T::min_positive() {
+            panic!("Cannot normalize zero length vector");
+        }
+        self.xyz /= ad;
+    }
+
+    pub fn cross_cross_new(&self, d1: &Self, d2: &Self) -> Self {
+        let mut d = self.clone();
+        d.cross_cross(d1, d2);
+        d
     }
 }

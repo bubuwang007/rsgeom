@@ -92,4 +92,16 @@ mod tests {
         assert!((angle12 - std::f64::consts::FRAC_PI_2).abs() < 1e-6);
         assert!((angle13 - 0.955).abs() < 1e-3);
     }
+
+    #[test]
+    fn test_cross_new(){
+        let d1 = Direction3d::from_coords(1.0, 0.0, 0.0);
+        let d2 = Direction3d::from_coords(0.0, 1.0, 0.0);
+        let cross_product = d1.cross_new(&d2);
+        
+        assert_eq!(cross_product.xyz.x, 0.0);
+        assert_eq!(cross_product.xyz.y, 0.0);
+        assert_eq!(cross_product.xyz.z, 1.0);
+    }
+
 }

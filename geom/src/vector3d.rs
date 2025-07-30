@@ -1,5 +1,5 @@
+use crate::XYZ;
 use crate::traits::FloatWithConst;
-use crate::xyz::XYZ;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Vector3d<T = f64> {
@@ -93,7 +93,9 @@ where
     }
 }
 
-impl<T> Vector3d<T> where T: Copy + Default + FloatWithConst 
+impl<T> Vector3d<T>
+where
+    T: Copy + Default + FloatWithConst,
 {
     pub fn length(&self) -> T {
         self.xyz.length()
@@ -102,6 +104,4 @@ impl<T> Vector3d<T> where T: Copy + Default + FloatWithConst
     pub fn squared_length(&self) -> T {
         self.xyz.squared_length()
     }
-
-    
 }

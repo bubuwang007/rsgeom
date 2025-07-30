@@ -1,6 +1,6 @@
-use crate::axis3d::Axis3d;
-use crate::direction3d::Direction3d;
-use crate::point3d::Point3d;
+use crate::Axis3d;
+use crate::Direction3d;
+use crate::Point3d;
 use crate::traits::FloatWithConst;
 
 #[derive(Debug, Clone, Copy)]
